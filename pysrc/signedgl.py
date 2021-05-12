@@ -3,7 +3,6 @@ import numpy as np
 from numba import njit
 from scipy.sparse import csr_matrix
 
-
 @njit
 def _rowsum_mat_entries(n):
     M = int(n*(n-1)) # number of non-diagonel entries in the matrix
@@ -35,12 +34,11 @@ def _rowsum_mat(n):
     M = len(rows)
     return csr_matrix((np.ones((M, )), (rows, cols)), shape=(n, int(M/2))) 
 
-
 @njit
 def _vw_step(yv, yw):
     M = len(yv)
-    v = np.zeros(M)
-    w = np.zeros(M)
+    v = np.zeros((M, 1))
+    w = np.zeros((M, 1))
     for i in range(M):
         if yv[i] < 0 and yw[i] < 0:
             if yv[i] < yw[i]:
@@ -53,7 +51,6 @@ def _vw_step(yv, yw):
             w[i] = yw[i]
 
     return v, w
-
 
 def _l_step(y, P, alpha, rho, n, m):
     beta2 = 4*alpha + rho
@@ -68,12 +65,13 @@ def _l_step(y, P, alpha, rho, n, m):
 
 
 def learn(k, d, alpha1, alpha2, rho=10, max_iter=1000):
+    # TODO: Docstring
 
     # Convert k and d to column vector if they are not already
     if np.ndim(k) == 1:
         k = k[..., None]
     
-    if np.dim(d) == 1:
+    if np.ndim(d) == 1:
         d = d[..., None]
 
     M = len(k) # number of node pairs
@@ -90,6 +88,8 @@ def learn(k, d, alpha1, alpha2, rho=10, max_iter=1000):
     lambda_pos = np.zeros((M, 1))
     lambda_neg = np.zeros((M, 1))
 
+    lagrangian = np.zeros(max_iter)
+
     # ADMM iterations
     for iter in range(max_iter):
         # v, w steps
@@ -98,13 +98,37 @@ def learn(k, d, alpha1, alpha2, rho=10, max_iter=1000):
         v, w = _vw_step(yv, yw)
 
         # positive l step
-        y = rho*v + lambda_pos - z
-        lpos = _l_step(y, P, alpha1, rho, n, M)
+        if alpha1 > 0:
+            y = rho*v + lambda_pos - z
+            lpos = _l_step(y, P, alpha1, rho, n, M)
 
         # negative l step
-        y = rho*v + lambda_pos + z
-        lneg = _l_step(y, P, alpha2, rho, n, M)
+        if alpha2 > 0:
+            y = rho*w + lambda_neg + z
+            lneg = _l_step(y, P, alpha2, rho, n, M)
 
         # multipliers update
         lambda_pos += rho*(v - lpos)
         lambda_neg += rho*(w - lneg)
+
+        # Calculate augmented lagrangian
+        lagrangian[iter] = ((z.T@lpos).item() - (z.T@lneg).item() 
+                            + 2*alpha1*np.linalg.norm(lpos)**2
+                            + alpha1*np.linalg.norm(P@lpos)**2
+                            + 2*alpha2*np.linalg.norm(lneg)**2
+                            + alpha2*np.linalg.norm(P@lneg)**2
+                            + (rho/2)*np.linalg.norm(v - lpos + lambda_pos/rho)**2
+                            + (rho/2)*np.linalg.norm(w - lneg + lambda_neg/rho)**2
+                            - (2/rho)*np.linalg.norm(lambda_pos)**2
+                            - (2/rho)*np.linalg.norm(lambda_neg)**2)
+
+        if iter > 0:
+            if abs(lagrangian[iter]/lagrangian[iter-1]-1)<1e-6:
+                lagrangian = lagrangian[:iter]
+                break
+
+    v[v>-1e-4] = 0
+    w[w>-1e-4] = 0
+    v = np.abs(v)
+    w = np.abs(w)
+    return v, w, lagrangian
