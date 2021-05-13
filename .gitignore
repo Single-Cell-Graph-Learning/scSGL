@@ -1,6 +1,7 @@
 notebooks/meetings/
 workspace.code-workspace
 .vscode/
+test.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
