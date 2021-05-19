@@ -1,5 +1,7 @@
 import numpy as np
 
+from . import utils
+
 def calc(counts):
     # TODO: Docstring
 
@@ -26,3 +28,8 @@ def calc(counts):
     rho[np.diag_indices_from(rho)] = 1
 
     return rho
+
+def permutations(counts, k, tau_neg, tau_pos):
+    # TODO: Docstring
+
+    return utils._permutations(counts, calc, k, tau_neg, tau_pos)
