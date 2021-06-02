@@ -1,0 +1,15 @@
+"0","```r
+
+method <- c(rep(\"BF\" , 4) , rep(\"Anova\" , 4) , rep(\"KW\" , 4) , rep(\"Wilcox\" , 4) , rep(\"MAST\" , 4),rep(\"LRT_mult\" , 4))
+type <- rep(c(\"TP\" , \"FP\" , \"FN\",\"TN\") , 6)
+value1<-c(686,345,1361,17831,1566,7437,481,10739,1617,8302,430,9874,
+          1616,10064,431,8112,
+          1783,1271,517,17986,1669,11674,378,6502)
+cf <- data.frame(method,type,value1)
+ggplot(cf, aes(fill=type, y=value1, x=as.factor(method))) + 
+  geom_text(aes(label=value1), position = position_dodge(width=1),
+            size=2,vjust = -0.5)+ geom_bar(position=\"dodge\", stat=\"identity\")+ 
+            xlab(\"Method\")+ ylab(\"Confusion Matrix Values\")+
+             ggtitle(\"Simulated Data Performance without log-fold changes (SplattDR_Stellate(a))\")+ 
+              theme(plot.title = element_text(color=\"red\", size=10, face=\"bold.italic\"))
+```"

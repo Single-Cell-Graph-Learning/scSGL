@@ -1,0 +1,8 @@
+"0","```r
+#Determine the genes predicted to be DE by the Bayes-factor test
+sig_genes_BF<-rownames(data[[\"0\"]])[which(Decision_bf_multiple_01_new == \"Positive\" & True_decision== \"Positive\" | Decision_bf_multiple_01_new == \"Positive\" & True_decision== \"Negative\")]
+simulated.data_dose_sig_genes_BF<-simulated.data_dose[,c(sig_genes_BF,\"Dose\")]
+#Subset the data list for non-significant genes (as determined by the BF test)
+data_sig_genes_BF<-lapply(data, function(x) x[sig_genes_BF,])
+data_sig_genes_BF_names<-rownames(data_sig_genes_BF[[\"0.01\"]])
+```"

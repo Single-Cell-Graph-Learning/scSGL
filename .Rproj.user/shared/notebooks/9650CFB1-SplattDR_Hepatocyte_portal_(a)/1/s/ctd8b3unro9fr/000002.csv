@@ -1,0 +1,63 @@
+"0","```r
+#Generate the confusion matrix for the ANOVA and KW test wrt the reference data
+caret::confusionMatrix(factor(my_data_anova_pred_dec,levels=c(\"Positive\",\"Negative\")),                      factor(my_data_true_dec,levels=c(\"Positive\",\"Negative\")))
+```"
+"1","Confusion Matrix and Statistics
+
+          Reference
+Prediction Positive Negative
+  Positive     1566     7437
+  Negative      481    10739
+                                          
+               Accuracy : 0.6085          
+                 95% CI : (0.6017, 0.6152)
+    No Information Rate : 0.8988          
+    P-Value [Acc > NIR] : 1               
+                                          
+                  Kappa : 0.1419          
+                                          
+ Mcnemar's Test P-Value : <2e-16          
+                                          
+            Sensitivity : 0.76502         
+            Specificity : 0.59083         
+         Pos Pred Value : 0.17394         
+         Neg Pred Value : 0.95713         
+             Prevalence : 0.10122         
+         Detection Rate : 0.07744         
+   Detection Prevalence : 0.44519         
+      Balanced Accuracy : 0.67793         
+                                          
+       'Positive' Class : Positive        
+                                          
+"
+"0","```r
+caret::confusionMatrix(factor(my_data_anova_pred_dec_lfc,levels=c(\"Positive\",\"Negative\")),                      factor(my_data_true_dec,levels=c(\"Positive\",\"Negative\")))
+```"
+"1","Confusion Matrix and Statistics
+
+          Reference
+Prediction Positive Negative
+  Positive      512      251
+  Negative     1535    17925
+                                          
+               Accuracy : 0.9117          
+                 95% CI : (0.9077, 0.9156)
+    No Information Rate : 0.8988          
+    P-Value [Acc > NIR] : 2.986e-10       
+                                          
+                  Kappa : 0.3274          
+                                          
+ Mcnemar's Test P-Value : < 2.2e-16       
+                                          
+            Sensitivity : 0.25012         
+            Specificity : 0.98619         
+         Pos Pred Value : 0.67104         
+         Neg Pred Value : 0.92112         
+             Prevalence : 0.10122         
+         Detection Rate : 0.02532         
+   Detection Prevalence : 0.03773         
+      Balanced Accuracy : 0.61816         
+                                          
+       'Positive' Class : Positive        
+                                          
+"

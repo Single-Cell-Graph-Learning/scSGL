@@ -1,0 +1,2 @@
+"0","# The [[ operator can add columns to object metadata. This is a great place to stash QC stats"
+"0","pbmc[[""percent.mt""]] <- PercentageFeatureSet(pbmc, pattern = ""^MT-"")"

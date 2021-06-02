@@ -1,0 +1,6 @@
+"0","saveRDS(pbmc_count_matrix,""pbmc_count_matrix.rds"")"
+"0","saveRDS(pbmc_lognormalized_data_matrix,""pbmc_lognormalized_data_matrix.rds"")"
+"0","saveRDS(pbmc_scaled_data_matrix,""pbmc_scaled_data_matrix.rds"")"
+"0","saveRDS(cell_labels_pbmc,""cell_labels_pbmc.rds"")"
+"2","
+"

@@ -1,0 +1,27 @@
+"0","```r
+#Bayes factor calculations for dose dependent model
+##BF FDR control using jeffreys 
+library(mvQuad)
+bf_multiple_01<-rep(list(list()), nrow(data[[\"0\"]]))
+source('~/Documents/Documents/Summer_2019/Mouse_Liver/Rance/snSeq-DGE/R/BayesFactorDD.R')
+
+  for(j in 1:nrow(data[[\"0\"]]))
+  {
+    bf_multiple_01[[j]]<-BayesFactorDD(
+                           Y = list(Y_1=as.matrix(data[[\"0\"]][j,]), 
+                           Y_2=as.matrix(data[[\"0.01\"]][j,]),
+                           Y_3=as.matrix(data[[\"0.03\"]][j,]),
+                           Y_4=as.matrix(data[[\"0.1\"]][j,]),
+                           Y_5=as.matrix(data[[\"0.3\"]][j,]),
+                           Y_6=as.matrix(data[[\"1\"]][j,]),
+                           Y_7=as.matrix(data[[\"3\"]][j,]),
+                           Y_8=as.matrix(data[[\"10\"]][j,]),
+                           Y_9=as.matrix(data[[\"30\"]][j,])),
+                           K=9,mu_m0= 1,mu_m1=1,tau_m0=1,tau_m1=1,
+                          mu_psi0=1,mu_psi1=1,sigma2_psi0=1,sigma2_psi1=1,
+                          levels_dose_level = levels(dose_level),
+                          b_sigma=1,a_sigma=6,
+                           prior_alt =0.1,
+                           prior_null =0.9)
+  }
+```"

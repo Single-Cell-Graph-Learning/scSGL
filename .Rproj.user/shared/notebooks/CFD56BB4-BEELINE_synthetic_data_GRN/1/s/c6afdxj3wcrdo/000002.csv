@@ -1,0 +1,22 @@
+"0","```r
+true_net_GSD_2000<-as.data.frame(read.csv(\"/Users/satabdisaha/Documents/Documents/Summer_2019/Mouse Liver/BEELINE/BEELINE-data/inputs/Curated/GSD/GSD-2000-1/refNetwork.csv\"))
+true_net_GSD<-matrix(data = 0, nrow = ncol(GSD_2000[[1]]),ncol=ncol(GSD_2000[[1]]))
+true_net_GSD_sign<-matrix(data = 0, nrow = ncol(GSD_2000[[1]]),ncol=ncol(GSD_2000[[1]]))
+dimnames(true_net_GSD) = list(colnames(GSD_2000[[1]]),colnames(GSD_2000[[1]]))
+dimnames(true_net_GSD_sign) = list(colnames(GSD_2000[[1]]),colnames(GSD_2000[[1]]))
+for(i in 1: nrow(true_net_GSD_2000))
+{
+  true_net_GSD[true_net_GSD_2000[i,1],true_net_GSD_2000[i,2]]=1
+  true_net_GSD[true_net_GSD_2000[i,2],true_net_GSD_2000[i,1]]=1
+  true_net_GSD_sign[true_net_GSD_2000[i,1],true_net_GSD_2000[i,2]] = true_net_GSD_2000[i,3]
+  true_net_GSD_sign[true_net_GSD_2000[i,2],true_net_GSD_2000[i,1]] =
+                      true_net_GSD_2000[i,3]
+}
+true_net_GSD_sign<-ifelse(true_net_GSD_sign == \"+\",1,ifelse(true_net_GSD_sign == \"-\",-1,0))
+diag(true_net_GSD_sign)<-0
+diag(true_net_GSD)<-0
+dimnames(true_net_GSD) = list(colnames(GSD_2000[[1]]),colnames(GSD_2000[[1]]))
+dimnames(true_net_GSD_sign) = list(colnames(GSD_2000[[1]]),colnames(GSD_2000[[1]]))
+saveRDS(true_net_GSD,\"/Users/satabdisaha/Documents/Documents/Summer_2019/Mouse Liver/Gene_Regulatory_Networks/Analysis/BEELINE synthetic data/Data/tru_net_GSD.rds\")
+saveRDS(true_net_GSD_sign,\"/Users/satabdisaha/Documents/Documents/Summer_2019/Mouse Liver/Gene_Regulatory_Networks/Analysis/BEELINE synthetic data/Data/tru_net_GSD_signed.rds\")
+```"

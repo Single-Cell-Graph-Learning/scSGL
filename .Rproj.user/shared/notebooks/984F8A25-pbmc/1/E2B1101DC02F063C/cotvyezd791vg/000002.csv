@@ -1,0 +1,8 @@
+"0","#Extract the Naive CD4 T  cells (one cell type) with top genes for that cluster 0 and cluster 1."
+"0","pbmc_300f_CD4T<-subset(pbmc,cells = which(cell_labels_pbmc==""Naive CD4 T"") , features = union(top150$gene[top150$cluster == 0] , top150$gene[top150$cluster == 1] )) #300 features and 711 cells"
+"0","pbmc_300f_CD4T_count<-as.matrix(pbmc_300f_CD4T[[""RNA""]]@counts)"
+"0","pbmc_300f_CD4T_count_dropout<-apply(pbmc_300f_CD4T_count,1,function(x) length(which(x==0))/length(x))"
+"0","pbmc_300f_CD4T_count_mean<-apply(pbmc_300f_CD4T_count,1,function(x) mean(x))"
+"0","pbmc_300f_CD4T_count_mean_pos<-apply(pbmc_300f_CD4T_count,1,function(x) mean(x[x>0]))"
+"0","pbmc_300f_CD4T_count_sd<-apply(pbmc_300f_CD4T_count,1,function(x) sd(x))"
+"0","pbmc_300f_CD4T_count_sd_pos<-apply(pbmc_300f_CD4T_count,1,function(x) sd(x[x>0]))"

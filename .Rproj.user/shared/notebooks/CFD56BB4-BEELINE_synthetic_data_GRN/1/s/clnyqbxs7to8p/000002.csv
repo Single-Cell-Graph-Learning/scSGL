@@ -1,0 +1,39 @@
+"0","```r
+#Data for the GSD network with 2000 cells, 19 genes 
+GSD_2000_1<- as.data.frame(read.csv(\"~/Summer_2019/Mouse Liver/BEELINE/BEELINE-data/inputs/Curated/GSD/GSD-2000-1/ExpressionData.csv\"))
+rownames(GSD_2000_1)<-GSD_2000_1[,1]
+GSD_2000_1<-GSD_2000_1[,-1]
+GSD_2000_2<- as.data.frame(read.csv(\"~/Summer_2019/Mouse Liver/BEELINE/BEELINE-data/inputs/Curated/GSD/GSD-2000-2/ExpressionData.csv\"))
+rownames(GSD_2000_2)<-GSD_2000_2[,1]
+GSD_2000_2<-GSD_2000_2[,-1]
+GSD_2000_3<- as.data.frame(read.csv(\"~/Summer_2019/Mouse Liver/BEELINE/BEELINE-data/inputs/Curated/GSD/GSD-2000-3/ExpressionData.csv\"))
+rownames(GSD_2000_3)<-GSD_2000_3[,1]
+GSD_2000_3<-GSD_2000_3[,-1]
+GSD_2000_4<- as.data.frame(read.csv(\"~/Summer_2019/Mouse Liver/BEELINE/BEELINE-data/inputs/Curated/GSD/GSD-2000-4/ExpressionData.csv\"))
+rownames(GSD_2000_4)<-GSD_2000_4[,1]
+GSD_2000_4<-GSD_2000_4[,-1]
+GSD_2000_5<- as.data.frame(read.csv(\"~/Summer_2019/Mouse Liver/BEELINE/BEELINE-data/inputs/Curated/GSD/GSD-2000-5/ExpressionData.csv\"))
+rownames(GSD_2000_5)<-GSD_2000_5[,1]
+GSD_2000_5<-GSD_2000_5[,-1]
+GSD_2000_6<- as.data.frame(read.csv(\"~/Summer_2019/Mouse Liver/BEELINE/BEELINE-data/inputs/Curated/GSD/GSD-2000-6/ExpressionData.csv\"))
+rownames(GSD_2000_6)<-GSD_2000_6[,1]
+GSD_2000_6<-GSD_2000_6[,-1]
+GSD_2000_7<- as.data.frame(read.csv(\"~/Summer_2019/Mouse Liver/BEELINE/BEELINE-data/inputs/Curated/GSD/GSD-2000-7/ExpressionData.csv\"))
+rownames(GSD_2000_7)<-GSD_2000_7[,1]
+GSD_2000_7<-GSD_2000_7[,-1]
+GSD_2000_8<- as.data.frame(read.csv(\"~/Summer_2019/Mouse Liver/BEELINE/BEELINE-data/inputs/Curated/GSD/GSD-2000-8/ExpressionData.csv\"))
+rownames(GSD_2000_8)<-GSD_2000_8[,1]
+GSD_2000_8<-GSD_2000_8[,-1]
+GSD_2000_9<- as.data.frame(read.csv(\"~/Summer_2019/Mouse Liver/BEELINE/BEELINE-data/inputs/Curated/GSD/GSD-2000-9/ExpressionData.csv\"))
+rownames(GSD_2000_9)<-GSD_2000_9[,1]
+GSD_2000_9<-GSD_2000_9[,-1]
+GSD_2000_10<- as.data.frame(read.csv(\"~/Summer_2019/Mouse Liver/BEELINE/BEELINE-data/inputs/Curated/GSD/GSD-2000-10/ExpressionData.csv\"))
+rownames(GSD_2000_10)<-GSD_2000_10[,1]
+GSD_2000_10<-GSD_2000_10[,-1]
+
+GSD_2000<-list(t(GSD_2000_1),t(GSD_2000_2),t(GSD_2000_3),
+                      t(GSD_2000_4),t(GSD_2000_5),t(GSD_2000_6),
+                      t(GSD_2000_7),t(GSD_2000_8),t(GSD_2000_9),
+                      t(GSD_2000_10))
+saveRDS(GSD_2000,\"C:/Users/satab/Documents/Summer_2019/Mouse Liver/Gene_Regulatory_Networks/Analysis/BEELINE synthetic data/Data/GSD_2000.rds\")
+```"

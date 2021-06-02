@@ -1,0 +1,6 @@
+"0","```r
+cdr <-colSums(assay(scaRaw)>0)
+colData(scaRaw)$cngeneson <- scale(cdr)
+filterCrit <- with(colData(scaRaw),cngeneson > 1)
+rowData(scaRaw)$symbolid <- rownames(simulated.gene.metadata)
+```"

@@ -1,0 +1,42 @@
+"0","```r
+library(data.table)
+```"
+"1","data.table 1.13.6 using 1 threads (see ?getDTthreads).  Latest news: r-datatable.com
+**********
+This installation of data.table has not detected OpenMP support. It should still work but in single-threaded mode.
+This is a Mac. Please read https://mac.r-project.org/openmp/. Please engage with Apple and ask them for support. Check r-datatable.com for updates, and our Mac instructions here: https://github.com/Rdatatable/data.table/wiki/Installation. After several years of many reports of installation problems on Mac, it's time to gingerly point out that there have been no similar problems on Windows or Linux.
+**********
+
+Attaching package: ‘data.table’
+
+The following object is masked from ‘package:SummarizedExperiment’:
+
+    shift
+
+The following object is masked from ‘package:GenomicRanges’:
+
+    shift
+
+The following object is masked from ‘package:IRanges’:
+
+    shift
+
+The following objects are masked from ‘package:S4Vectors’:
+
+    first, second
+"
+"0","```r
+library(ggplot2)
+simulated.data_df <-as.data.table(t(simulated.data))
+k0<-qplot(Gene2, data = simulated.data_df[Gene2  < 
+                    quantile(as.numeric(simulated.data_df$Gene2), probs = .99)]) 
+simulated.data_df<- simulated.data_df[, Gene2_pos := ifelse(Gene2 > 0, Gene2 , NA)]
+k1<-ggplot(simulated.data_df, aes(x = Gene2_pos)) + 
+  geom_histogram(aes(y = ..density..), colour = \"black\", fill = \"White\") +
+  stat_function(fun = dnorm, args = MASS::fitdistr(simulated.data_df[Gene2 > 0 ,Gene2_pos ], \"normal\")$estimate)
+ggpubr::ggarrange(k0,k1,ncol=2,nrow=1) 
+```"
+"1","`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+Removed 4353 rows containing non-finite values (stat_bin).
+"

@@ -1,0 +1,29 @@
+
+#' @title Generate zero-inflated negative-binomial data having n rows and p columns 
+#' @author Satabdi Saha
+#' @param p : No of genes per cluster
+#' @param nclust: No of clusters
+#' @param mult_norm_data : Data matrix with n rows and p columns generated from a multivariate normal distribution
+#' @param mean_real_data : mean vector of all genes estimated from a real single cell dataset
+#' @param sd_real_data  : sd vector of all genes estimated from a real single cell dataset
+#' @param dropout : dropout parameter vector for all genes estimated using the exp_fun.R function
+#'
+#' @return zinb_data : Data matrix with n rows and p columns generated from a zero inflated negative binomial distribution
+#' @export
+#'
+#' @examples
+sim.ZINB<-function(p,nclust,mult_norm_data, mean_real_data,sd_real_data,dropout){
+  library(ZIM)
+  zinb_data <- matrix(NA,nc, (p*nclust))
+  for(j in 1:(p*nclust))
+  {
+    dat <- mult_norm_data[,j]
+    mu_v <- mean(dat)
+    sd_v <- sd(dat)
+    p_v <- pnorm(dat,mu_v,sd_v)
+    zinb_data[,j] <- qzinb(p = p_v, k=sd_real_data[j], lambda=mean_real_data[j], 
+                           omega=dropout[j])
+  }
+  return(zinb_data)
+}
+

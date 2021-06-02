@@ -1,0 +1,4 @@
+"0","```r
+library(MAST)
+scaRaw <- FromMatrix(as.matrix(normalized_clust1_full), as.data.frame(cell_metadata_clust1), as.data.frame(gene_metadata_clust1_full))
+```"

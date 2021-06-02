@@ -1,0 +1,32 @@
+"0","```r
+caret::confusionMatrix(factor(my_data_kruskal_pred_dec,levels=c(\"Positive\",\"Negative\")),                      factor(my_data_true_dec,levels=c(\"Positive\",\"Negative\")))
+
+```"
+"1","Confusion Matrix and Statistics
+
+          Reference
+Prediction Positive Negative
+  Positive     1706     6380
+  Negative      442    12877
+                                         
+               Accuracy : 0.6813         
+                 95% CI : (0.675, 0.6875)
+    No Information Rate : 0.8996         
+    P-Value [Acc > NIR] : 1              
+                                         
+                  Kappa : 0.2078         
+                                         
+ Mcnemar's Test P-Value : <2e-16         
+                                         
+            Sensitivity : 0.7942         
+            Specificity : 0.6687         
+         Pos Pred Value : 0.2110         
+         Neg Pred Value : 0.9668         
+             Prevalence : 0.1004         
+         Detection Rate : 0.0797         
+   Detection Prevalence : 0.3778         
+      Balanced Accuracy : 0.7315         
+                                         
+       'Positive' Class : Positive       
+                                         
+"

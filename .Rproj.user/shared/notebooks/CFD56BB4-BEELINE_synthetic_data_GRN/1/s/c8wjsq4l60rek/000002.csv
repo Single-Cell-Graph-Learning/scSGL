@@ -1,0 +1,39 @@
+"0","```r
+#Data for the VSC network with 2000 cells, 8 genes 
+VSC_2000_1<- as.data.frame(read.csv(\"~/Summer_2019/Mouse Liver/BEELINE/BEELINE-data/inputs/Curated/VSC/VSC-2000-1/ExpressionData.csv\"))
+rownames(VSC_2000_1)<-VSC_2000_1[,1]
+VSC_2000_1<-VSC_2000_1[,-1]
+VSC_2000_2<- as.data.frame(read.csv(\"~/Summer_2019/Mouse Liver/BEELINE/BEELINE-data/inputs/Curated/VSC/VSC-2000-2/ExpressionData.csv\"))
+rownames(VSC_2000_2)<-VSC_2000_2[,1]
+VSC_2000_2<-VSC_2000_2[,-1]
+VSC_2000_3<- as.data.frame(read.csv(\"~/Summer_2019/Mouse Liver/BEELINE/BEELINE-data/inputs/Curated/VSC/VSC-2000-3/ExpressionData.csv\"))
+rownames(VSC_2000_3)<-VSC_2000_3[,1]
+VSC_2000_3<-VSC_2000_3[,-1]
+VSC_2000_4<- as.data.frame(read.csv(\"~/Summer_2019/Mouse Liver/BEELINE/BEELINE-data/inputs/Curated/VSC/VSC-2000-4/ExpressionData.csv\"))
+rownames(VSC_2000_4)<-VSC_2000_4[,1]
+VSC_2000_4<-VSC_2000_4[,-1]
+VSC_2000_5<- as.data.frame(read.csv(\"~/Summer_2019/Mouse Liver/BEELINE/BEELINE-data/inputs/Curated/VSC/VSC-2000-5/ExpressionData.csv\"))
+rownames(VSC_2000_5)<-VSC_2000_5[,1]
+VSC_2000_5<-VSC_2000_5[,-1]
+VSC_2000_6<- as.data.frame(read.csv(\"~/Summer_2019/Mouse Liver/BEELINE/BEELINE-data/inputs/Curated/VSC/VSC-2000-6/ExpressionData.csv\"))
+rownames(VSC_2000_6)<-VSC_2000_6[,1]
+VSC_2000_6<-VSC_2000_6[,-1]
+VSC_2000_7<- as.data.frame(read.csv(\"~/Summer_2019/Mouse Liver/BEELINE/BEELINE-data/inputs/Curated/VSC/VSC-2000-7/ExpressionData.csv\"))
+rownames(VSC_2000_7)<-VSC_2000_7[,1]
+VSC_2000_7<-VSC_2000_7[,-1]
+VSC_2000_8<- as.data.frame(read.csv(\"~/Summer_2019/Mouse Liver/BEELINE/BEELINE-data/inputs/Curated/VSC/VSC-2000-8/ExpressionData.csv\"))
+rownames(VSC_2000_8)<-VSC_2000_8[,1]
+VSC_2000_8<-VSC_2000_8[,-1]
+VSC_2000_9<- as.data.frame(read.csv(\"~/Summer_2019/Mouse Liver/BEELINE/BEELINE-data/inputs/Curated/VSC/VSC-2000-9/ExpressionData.csv\"))
+rownames(VSC_2000_9)<-VSC_2000_9[,1]
+VSC_2000_9<-VSC_2000_9[,-1]
+VSC_2000_10<- as.data.frame(read.csv(\"~/Summer_2019/Mouse Liver/BEELINE/BEELINE-data/inputs/Curated/VSC/VSC-2000-10/ExpressionData.csv\"))
+rownames(VSC_2000_10)<-VSC_2000_10[,1]
+VSC_2000_10<-VSC_2000_10[,-1]
+
+VSC_2000<-list(t(VSC_2000_1),t(VSC_2000_2),t(VSC_2000_3),
+                      t(VSC_2000_4),t(VSC_2000_5),t(VSC_2000_6),
+                      t(VSC_2000_7),t(VSC_2000_8),t(VSC_2000_9),
+                      t(VSC_2000_10))
+saveRDS(VSC_2000,\"C:/Users/satab/Documents/Summer_2019/Mouse Liver/Gene_Regulatory_Networks/Analysis/BEELINE synthetic data/Data/VSC_2000.rds\")
+```"

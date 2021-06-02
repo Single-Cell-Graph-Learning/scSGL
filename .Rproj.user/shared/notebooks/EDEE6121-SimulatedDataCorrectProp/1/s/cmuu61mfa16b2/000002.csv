@@ -1,0 +1,25 @@
+"0","```r
+
+levels(as.factor(simulated.gene.metadata$Model))
+
+xx<-which(simulated.gene.metadata$Model==\"Linear\")
+length(Decision_zzz_new[xx])
+length(which(Decision_zzz_new[xx] == \"Positive\"))
+length(which(Decision_zzz_new[xx] == \"Negative\"))
+
+xx_exp2<-which(simulated.gene.metadata$Model==\"Exp2\")
+length(Decision_zzz_new[xx_exp2])
+length(which(Decision_zzz_new[xx_exp2] == \"Positive\"))
+length(which(Decision_zzz_new[xx_exp2] == \"Negative\"))
+
+xx_exp<-which(simulated.gene.metadata$Model==\"Exp\")
+length(Decision_zzz_new[xx_exp])
+length(which(Decision_zzz_new[xx_exp] == \"Positive\"))
+length(which(Decision_zzz_new[xx_exp] == \"Negative\"))
+
+xx_un<-which(simulated.gene.metadata$Model==\"Unchanged\")
+length(Decision_zzz_new[xx_un])
+length(which(Decision_zzz_new[xx_un] == \"Positive\"))
+length(which(Decision_zzz_new[xx_un] == \"Negative\"))
+
+```"

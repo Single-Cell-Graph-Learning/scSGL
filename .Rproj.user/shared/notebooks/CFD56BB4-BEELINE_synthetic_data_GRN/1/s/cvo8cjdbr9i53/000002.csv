@@ -1,0 +1,7 @@
+"0","```r
+#Only print the top k values of a matrix rest are zeroes
+kmat <- function(mat, k){
+    mat[t(apply(mat, 1, rank)) <= (ncol(mat)-k)] <- 0
+    mat
+}
+```"

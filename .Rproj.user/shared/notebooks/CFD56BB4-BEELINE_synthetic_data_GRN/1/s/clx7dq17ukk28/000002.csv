@@ -1,0 +1,26 @@
+"0","```r
+#Calculation of early precision
+#Count the total edges in the true network
+tot_edge_GT<-sum(!!true_net) 
+tot_edge_EST<-vector()
+EP<-vector()
+EBICgraph_binary<-list(matrix(data=NA,nrow=ncol(data[[1]]),ncol=ncol(data[[1]])))
+for(i in 1:length(data))
+{
+  tot_edge_EST[i]<-sum(!!EBICgraph[[i]])
+  if(tot_edge_EST[i]<tot_edge_GT)
+  {
+    EBICgraph_binary[[i]]<-binarize(abs(kmat(EBICgraph[[i]],
+                                             tot_edge_EST[i])),threshold = 0.1)
+    
+    EP[i]<-sum(!!EBICgraph_binary[[i]])/tot_edge_EST[i]
+  }
+  else
+    EBICgraph_binary[[i]]<-binarize(abs(kmat(EBICgraph[[i]],
+                                             tot_edge_GT)),threshold = 0.1)
+    EP[i]<-sum(!!EBICgraph_binary[[i]])/tot_edge_GT
+}
+mean(EP)
+sd(EP)
+
+```"
