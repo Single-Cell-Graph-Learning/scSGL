@@ -1,0 +1,27 @@
+"0","```r
+mcad_2000<-readRDS(\"/Users/satabdisaha/Documents/Documents/Summer_2019/Mouse Liver/Gene_Regulatory_Networks/Analysis/BEELINE synthetic data/Data/mcad_2000.rds\")
+VSC_2000<-readRDS(\"/Users/satabdisaha/Documents/Documents/Summer_2019/Mouse Liver/Gene_Regulatory_Networks/Analysis/BEELINE synthetic data/Data/VSC_2000.rds\")
+HSC_2000<-readRDS(\"/Users/satabdisaha/Documents/Documents/Summer_2019/Mouse Liver/Gene_Regulatory_Networks/Analysis/BEELINE synthetic data/Data/HSC_2000.rds\")
+GSD_2000<-readRDS(\"/Users/satabdisaha/Documents/Documents/Summer_2019/Mouse Liver/Gene_Regulatory_Networks/Analysis/BEELINE synthetic data/Data/GSD_2000.rds\")
+
+mcad_2000_50<-readRDS(\"/Users/satabdisaha/Documents/Documents/Summer_2019/Mouse Liver/Gene_Regulatory_Networks/Analysis/BEELINE synthetic data/Data/mcad_2000_50.rds\")
+VSC_2000_50<-readRDS(\"/Users/satabdisaha/Documents/Documents/Summer_2019/Mouse Liver/Gene_Regulatory_Networks/Analysis/BEELINE synthetic data/Data/VSC_2000_50.rds\")
+HSC_2000_50<-readRDS(\"/Users/satabdisaha/Documents/Documents/Summer_2019/Mouse Liver/Gene_Regulatory_Networks/Analysis/BEELINE synthetic data/Data/HSC_2000_50.rds\")
+GSD_2000_50<-readRDS(\"/Users/satabdisaha/Documents/Documents/Summer_2019/Mouse Liver/Gene_Regulatory_Networks/Analysis/BEELINE synthetic data/Data/GSD_2000_50.rds\")
+
+mcad_2000_70<-readRDS(\"/Users/satabdisaha/Documents/Documents/Summer_2019/Mouse Liver/Gene_Regulatory_Networks/Analysis/BEELINE synthetic data/Data/mcad_2000_70.rds\")
+VSC_2000_70<-readRDS(\"/Users/satabdisaha/Documents/Documents/Summer_2019/Mouse Liver/Gene_Regulatory_Networks/Analysis/BEELINE synthetic data/Data/VSC_2000_70.rds\")
+HSC_2000_70<-readRDS(\"/Users/satabdisaha/Documents/Documents/Summer_2019/Mouse Liver/Gene_Regulatory_Networks/Analysis/BEELINE synthetic data/Data/HSC_2000_70.rds\")
+GSD_2000_70<-readRDS(\"/Users/satabdisaha/Documents/Documents/Summer_2019/Mouse Liver/Gene_Regulatory_Networks/Analysis/BEELINE synthetic data/Data/GSD_2000_70.rds\")
+
+true_net_mCAD<-readRDS(\"/Users/satabdisaha/Documents/Documents/Summer_2019/Mouse Liver/Gene_Regulatory_Networks/Analysis/BEELINE synthetic data/Data/tru_net_mCAD.rds\")
+true_net_VSC<-readRDS(\"/Users/satabdisaha/Documents/Documents/Summer_2019/Mouse Liver/Gene_Regulatory_Networks/Analysis/BEELINE synthetic data/Data/tru_net_VSC.rds\")
+true_net_HSC<-readRDS(\"/Users/satabdisaha/Documents/Documents/Summer_2019/Mouse Liver/Gene_Regulatory_Networks/Analysis/BEELINE synthetic data/Data/tru_net_HSC.rds\")
+true_net_GSD<-readRDS(\"/Users/satabdisaha/Documents/Documents/Summer_2019/Mouse Liver/Gene_Regulatory_Networks/Analysis/BEELINE synthetic data/Data/tru_net_GSD.rds\")
+
+true_net_mCAD_sign<-readRDS(\"/Users/satabdisaha/Documents/Documents/Summer_2019/Mouse Liver/Gene_Regulatory_Networks/Analysis/BEELINE synthetic data/Data/tru_net_mCAD_signed.rds\")
+true_net_VSC_sign<-readRDS(\"/Users/satabdisaha/Documents/Documents/Summer_2019/Mouse Liver/Gene_Regulatory_Networks/Analysis/BEELINE synthetic data/Data/tru_net_VSC_signed.rds\")
+true_net_HSC_sign<-readRDS(\"/Users/satabdisaha/Documents/Documents/Summer_2019/Mouse Liver/Gene_Regulatory_Networks/Analysis/BEELINE synthetic data/Data/tru_net_HSC_signed.rds\")
+true_net_GSD_sign<-readRDS(\"/Users/satabdisaha/Documents/Documents/Summer_2019/Mouse Liver/Gene_Regulatory_Networks/Analysis/BEELINE synthetic data/Data/tru_net_GSD_signed.rds\")
+
+```"

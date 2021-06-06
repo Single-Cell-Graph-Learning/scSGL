@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 notebooks/meetings/
 workspace.code-workspace
 .vscode/
@@ -136,3 +137,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+=======
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+>>>>>>> Stashed changes

@@ -1,0 +1,5 @@
+"0","```r
+library(igraph)
+g<-graph_from_adjacency_matrix(true_net_GSD)
+plot(g,layout = layout_with_graphopt, edge.arrow.size = 0.1)
+```"

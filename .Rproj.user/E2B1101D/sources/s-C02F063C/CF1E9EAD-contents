@@ -1,0 +1,149 @@
+library(parallel)
+library(igraph)
+library(matrixcalc)
+library(MASS)
+# install.packages("/Users/satabdisaha/Downloads/QUIC", 
+#                  repos = NULL, 
+#                  type = "source")
+# library(QUIC)
+library(Hmisc)
+library(robustbase)
+library(GENIE3)
+library(fitdistrplus)
+library(ZIM)
+
+library(ggplot2); theme_set(theme_bw())
+library(tidyr)
+library(dplyr)
+library(varhandle)
+library(zoo) 
+library(VGAM) 
+library(corpcor) 
+library(Matrix) 
+
+#files.sources = list.files("./pcorSimulator", full.names = TRUE)
+#sapply(files.sources, source)
+setwd("/Users/satabdisaha/Documents/Documents/Summer_2019/scSGL/scSGL_nogit")
+source("pcorSimulator.R")
+source("controlsPcorSimulator.R")
+source("graphStructure.R")
+source("lowerTriInd.R")
+source("funs-get-res.R")
+source("get_mix_parameters.R")
+source("exp_fun.R")
+source("generate.ZINB.data.R")
+
+rdir = "/Users/satabdisaha/Documents/Documents/Summer_2019/scSGL/scSGL_nogit/simulation_scLink"
+dir.create(rdir, recursive = TRUE)
+
+
+
+### ------------------------------------------------------------------
+### simulate data
+### ------------------------------------------------------------------
+
+nc = 300 # number of cells
+B = 10
+ncores = 1
+thre_no = 10
+p=50
+params<-list()
+params$mean<-pbmc_300f_CD4T_count_mean[pbmc_300f_CD4T_count_mean>0.4]
+params$sigma<-pbmc_300f_CD4T_count_sd[names(params$mean)]
+
+##########################################################################
+simulate_hub_norm = function(p, nc = nc, nclust,
+                        pattern = "powerLaw", 
+                        seed = 1, pdf = TRUE, path, ...){
+  #set.seed(seed)
+  sim_cor = pcorSimulatorSimple(nobs = 300, nclusters=nclust, 
+                                nnodesxcluster=rep(p,nclust), 
+                                pattern=pattern,prob=0.01, ...)
+  
+  theta = sim_cor$omega
+  sum(abs(theta) < 1e-5)
+  sigma = params$sigma
+  cov = solve(theta)
+  dem = sqrt(diag(cov))
+  cov = sweep(cov, MARGIN = 2, dem, FUN = "/")
+  cov = sweep(cov, MARGIN = 1, dem, FUN = "/")
+  cov = sweep(cov, MARGIN = 2, sigma[1: (p*nclust)], FUN = "*")
+  cov = sweep(cov, MARGIN = 1, sigma[1: (p*nclust)], FUN = "*")
+  theta = solve(cov)
+  theta[abs(theta) < 1e-5] = 0
+  if(!is.positive.definite(theta)) stop("precision matrix is not PD!")  
+  adj_true = ((theta)!=0)*1
+  
+  ### simulate count matrices for all time points -----------------------
+  mu = params$mean
+  cnt = mvrnorm(n = nc, mu = mu[1: (p*nclust)], Sigma = cov)
+  cnt[cnt < 0] = 0
+  return (cnt)
+}
+
+simulate_hub_count = function(p, nc = nc, nclust, rho=rho, mult_norm_data,
+                             pattern = "powerLaw", 
+                             seed = 1, pdf = TRUE, path, ...) {
+  #cnt is the mult-norm data
+  print(paste0("rho: ", rho))
+  #Calculate gene specific dropouts
+  dropout<-exp_fun(const = rho, mult_norm_data = mult_norm_data,nc=nc,p=p,nclust = nclust)
+  print(paste0("Mean Dropout = ", mean(dropout)))
+  # generate count data y following zero-inflated negative-binomial distribution 
+  zinb_data<-sim.ZINB(p,nclust,mult_norm_data,params$mean,params$sigma,dropout = dropout)
+  print(paste0("Mean Dropout ZINB = ", mean(apply(zinb_data,2,function(x) length(which(x==0))/length(x)))))
+  plot( apply(zinb_data,2,mean), apply(zinb_data,2,function(x) length(which(x==0))/length(x)))
+  return(list(cov_true = cov, theta_true = theta, 
+              adj_true = adj_true, mult_norm = mult_norm_data, zinb_data = zinb_data))
+}
+
+theta2pcor = function(theta){
+  denom = sqrt(diag(theta))
+  pcor = sweep(theta, MARGIN = 1, denom, FUN = "/")
+  pcor = sweep(pcor, MARGIN = 2, denom, FUN = "/")
+  return(-pcor)
+}
+
+
+
+nr = 10
+l1 = seq(0.5, 0.001, length=nr)
+p = 50
+nclustvals = c(2, 3)
+rhovals = c(0.01,0.07, 0.10, 0.16, 0.7, 0.9)
+
+### simulate data
+for(nclust in nclustvals) {
+  print(paste("nc", nclust))
+  sim_data_norm<-rep(list(matrix(NA, nc, p*nclust)), length = B)
+  for(rho in rhovals) {
+    if(rho == "0.01") {
+      for(b in 1:B) {
+        sim_data_norm[[b]] = simulate_hub_norm(p = p, nc = nc, nclust = nclust, seed = b,
+                                          pattern = "powerLaw", low.strength = 0.4, sup.strength = 0.7,
+                                          pdf = FALSE)
+      }
+     }
+    
+    print(paste("rho", rho))
+    sim_data<-rep(list(matrix(NA, nc, p*nclust)), length = B)
+    for(b in 1:B) {
+      if(b %% 10 == 0) print(paste("rep", b)); 
+      ### simulate data ---------------------------------
+      sim_data[[b]] = simulate_hub_count(p = p, nc = nc, nclust = nclust, rho = rho, mult_norm_data = sim_data_norm[[b]], seed = b,
+                              pattern = "powerLaw", low.strength = 0.4, sup.strength = 0.7,
+                              pdf = FALSE)
+      countd = sim_data[[b]]$zinb_data
+      # save countd
+      saveda = t(countd)
+      colnames(saveda) = paste0("cell", 1:ncol(saveda))
+      write.table(saveda, file = paste0(rdir, "graph-nc", nclust, "-rho-", rho, "-b-", b, ".txt"),
+                  quote = FALSE)
+    }
+    
+    saveRDS(sim_data, file = paste0(rdir, "rep-nc", nclust, "-rho", rho, ".rds"))
+    # rm.all.but(keep="rep_mult_norm")
+  }
+}
+
+

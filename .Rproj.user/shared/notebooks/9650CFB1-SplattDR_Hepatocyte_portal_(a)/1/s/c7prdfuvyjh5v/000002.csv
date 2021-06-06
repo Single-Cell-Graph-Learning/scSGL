@@ -1,0 +1,62 @@
+"0","```r
+caret::confusionMatrix(factor(my_data_kruskal_pred_dec,levels=c(\"Positive\",\"Negative\")),                      factor(my_data_true_dec,levels=c(\"Positive\",\"Negative\")))
+```"
+"1","Confusion Matrix and Statistics
+
+          Reference
+Prediction Positive Negative
+  Positive     1617     8302
+  Negative      430     9874
+                                          
+               Accuracy : 0.5682          
+                 95% CI : (0.5614, 0.5751)
+    No Information Rate : 0.8988          
+    P-Value [Acc > NIR] : 1               
+                                          
+                  Kappa : 0.1231          
+                                          
+ Mcnemar's Test P-Value : <2e-16          
+                                          
+            Sensitivity : 0.78994         
+            Specificity : 0.54324         
+         Pos Pred Value : 0.16302         
+         Neg Pred Value : 0.95827         
+             Prevalence : 0.10122         
+         Detection Rate : 0.07996         
+   Detection Prevalence : 0.49048         
+      Balanced Accuracy : 0.66659         
+                                          
+       'Positive' Class : Positive        
+                                          
+"
+"0","```r
+caret::confusionMatrix(factor(my_data_kruskal_pred_dec_lfc,levels=c(\"Positive\",\"Negative\")),                      factor(my_data_true_dec,levels=c(\"Positive\",\"Negative\")))
+```"
+"1","Confusion Matrix and Statistics
+
+          Reference
+Prediction Positive Negative
+  Positive      512      251
+  Negative     1535    17925
+                                          
+               Accuracy : 0.9117          
+                 95% CI : (0.9077, 0.9156)
+    No Information Rate : 0.8988          
+    P-Value [Acc > NIR] : 2.986e-10       
+                                          
+                  Kappa : 0.3274          
+                                          
+ Mcnemar's Test P-Value : < 2.2e-16       
+                                          
+            Sensitivity : 0.25012         
+            Specificity : 0.98619         
+         Pos Pred Value : 0.67104         
+         Neg Pred Value : 0.92112         
+             Prevalence : 0.10122         
+         Detection Rate : 0.02532         
+   Detection Prevalence : 0.03773         
+      Balanced Accuracy : 0.61816         
+                                          
+       'Positive' Class : Positive        
+                                          
+"

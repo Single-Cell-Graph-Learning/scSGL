@@ -1,0 +1,6 @@
+"0","# FeatureScatter is typically used to visualize feature-feature relationships, but can be used"
+"0","# for anything calculated by the object, i.e. columns in object metadata, PC scores etc."
+"0",""
+"0","plot1 <- FeatureScatter(pbmc, feature1 = ""nCount_RNA"", feature2 = ""percent.mt"")"
+"0","plot2 <- FeatureScatter(pbmc, feature1 = ""nCount_RNA"", feature2 = ""nFeature_RNA"")"
+"0","plot1 + plot2"

@@ -1,0 +1,93 @@
+"0","```r
+source('~/Documents/Documents/Summer_2019/Mouse_Liver/Rance/snSeq-DGE/R/WilcoxonRankSumTest.R')
+WRS<-rep(list(data.table()),times=nlevels(dose_level)-1)
+for (i in 1:8 )
+{
+   WRS[[i]]<-WRS_test(simulated.data_dose,levels(dose_level)[1],levels(dose_level)[i+1]) 
+}
+WRS_adjust<-lapply(WRS, function(x) p.adjust(x, method = \"fdr\"))
+WRS_dec<-lapply(WRS_adjust,function(x) ifelse(x<0.05,\"Positive\",\"Negative\"))
+WRS_dec_lfc<-Map(function(x,y) ifelse(x==\"Positive\"& abs(y)>log(1.5),\"Positive\",\"Negative\"),WRS_dec,log_fold_change)
+names(WRS_dec_lfc)<-levels(dose_level)[2:9]
+names(WRS_dec)<-levels(dose_level)[2:9]
+
+
+sig_WRS<-(union(which(WRS_dec[[\"0.01\"]]==\"Positive\"),union(which(WRS_dec[[\"0.03\"]]==\"Positive\"),union(which(WRS_dec[[\"0.1\"]]==\"Positive\"),union(which(WRS_dec[[\"0.3\"]]==\"Positive\"),union(which(WRS_dec[[\"1\"]]==\"Positive\"),union(which(WRS_dec[[\"3\"]]==\"Positive\"),union(which(WRS_dec[[\"10\"]]==\"Positive\"),which(WRS_dec[[\"30\"]]==\"Positive\")))))))))
+length(sig_WRS)
+```"
+"1","[1] 11680
+"
+"0","```r
+sig_WRS<-rownames(data[[\"0\"]])[sig_WRS]
+sig_WRS_lfc<-(union(which(WRS_dec_lfc[[\"0.01\"]]==\"Positive\"),union(which(WRS_dec_lfc[[\"0.03\"]]==\"Positive\"),union(which(WRS_dec_lfc[[\"0.1\"]]==\"Positive\"),union(which(WRS_dec_lfc[[\"0.3\"]]==\"Positive\"),union(which(WRS_dec_lfc[[\"1\"]]==\"Positive\"),union(which(WRS_dec_lfc[[\"3\"]]==\"Positive\"),union(which(WRS_dec_lfc[[\"10\"]]==\"Positive\"),which(WRS_dec_lfc[[\"30\"]]==\"Positive\")))))))))
+length(sig_WRS_lfc)
+```"
+"1","[1] 793
+"
+"0","```r
+sig_WRS_lfc<-rownames(data[[\"0\"]])[sig_WRS_lfc]
+
+true_dec<-ifelse(simulated.gene.metadata$Model!=\"Unchanged\",\"Positive\",\"Negative\")
+pred_dec_WRS_comb<-ifelse(rownames(simulated.gene.metadata)%in%sig_WRS == TRUE,\"Positive\",\"Negative\")
+pred_dec_WRS_comb_lfc<-ifelse(rownames(simulated.gene.metadata)%in%sig_WRS_lfc == TRUE,\"Positive\",\"Negative\")
+caret::confusionMatrix(factor(pred_dec_WRS_comb,levels=c(\"Positive\",\"Negative\")),factor(true_dec,levels = c(\"Positive\",\"Negative\")))
+```"
+"1","Confusion Matrix and Statistics
+
+          Reference
+Prediction Positive Negative
+  Positive     1616    10064
+  Negative      431     8112
+                                          
+               Accuracy : 0.481           
+                 95% CI : (0.4741, 0.4879)
+    No Information Rate : 0.8988          
+    P-Value [Acc > NIR] : 1               
+                                          
+                  Kappa : 0.0763          
+                                          
+ Mcnemar's Test P-Value : <2e-16          
+                                          
+            Sensitivity : 0.78945         
+            Specificity : 0.44630         
+         Pos Pred Value : 0.13836         
+         Neg Pred Value : 0.94955         
+             Prevalence : 0.10122         
+         Detection Rate : 0.07991         
+   Detection Prevalence : 0.57756         
+      Balanced Accuracy : 0.61788         
+                                          
+       'Positive' Class : Positive        
+                                          
+"
+"0","```r
+caret::confusionMatrix(factor(pred_dec_WRS_comb_lfc,levels=c(\"Positive\",\"Negative\")),factor(true_dec,levels = c(\"Positive\",\"Negative\")))
+```"
+"1","Confusion Matrix and Statistics
+
+          Reference
+Prediction Positive Negative
+  Positive      542      251
+  Negative     1505    17925
+                                         
+               Accuracy : 0.9132         
+                 95% CI : (0.9092, 0.917)
+    No Information Rate : 0.8988         
+    P-Value [Acc > NIR] : 2.24e-12       
+                                         
+                  Kappa : 0.3446         
+                                         
+ Mcnemar's Test P-Value : < 2.2e-16      
+                                         
+            Sensitivity : 0.26478        
+            Specificity : 0.98619        
+         Pos Pred Value : 0.68348        
+         Neg Pred Value : 0.92254        
+             Prevalence : 0.10122        
+         Detection Rate : 0.02680        
+   Detection Prevalence : 0.03921        
+      Balanced Accuracy : 0.62548        
+                                         
+       'Positive' Class : Positive       
+                                         
+"

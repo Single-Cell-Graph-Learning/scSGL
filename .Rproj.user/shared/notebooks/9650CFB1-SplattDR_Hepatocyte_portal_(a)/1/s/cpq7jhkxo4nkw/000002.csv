@@ -1,0 +1,24 @@
+"0","```r
+#Pairwise bayes factor calculations for the significant genes
+##BF FDR control using jeffreys 
+a<-rep(list(list()),nrow(data_sig_genes_BF[[\"0\"]]))
+bf_actual_01<-rep(list(a), nlevels(dose_level)-1)
+names(bf_actual_01)<-levels(dose_level)[-1]
+source('~/Documents/Documents/Summer_2019/Mouse_Liver/Rance/snSeq-DGE/R/BayesFactorMultiple.R')
+for (i in levels(dose_level)[-1])
+{
+  for(j in 1:nrow(data_sig_genes_BF[[\"0\"]]))
+  {
+    bf_actual_01[[i]][[j]]<-
+      Bayes_factor_multiple(Y = list(Y_1=as.matrix(data_sig_genes_BF[[\"0\"]][j,]), 
+               Y_2=as.matrix(data_sig_genes_BF[[i]][j,])),
+               m_0=mean(m[\"0\"] + m[i]),m=c(m[\"0\"],m[i]),K=2,
+                           tau_k_mu =c(tau_k_mu[\"0\"],tau_k_mu[i]),
+                           tau_mu=tau_mu[2], 
+                           b_sigma=1,a_sigma=6,a_w=8,b_w=2,
+                           prior_alt =prior_Alter[2],
+                           prior_null = prior_Null[2]
+               )
+  }
+}
+```"

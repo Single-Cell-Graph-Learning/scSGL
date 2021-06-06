@@ -1,0 +1,27 @@
+"0","```r
+source('~/Documents/Documents/Summer_2019/Mouse_Liver/Rance/snSeq-DGE/R/WilcoxonRankSumTest.R')
+WRS<-rep(list(data.table()),times=nlevels(dose_level)-1)
+for (i in 1:8 )
+{
+   WRS[[i]]<-WRS_test(simulated.data_dose,levels(dose_level)[1],levels(dose_level)[i+1]) 
+}
+WRS_adjust<-lapply(WRS, function(x) p.adjust(x, method = \"fdr\"))
+WRS_dec<-lapply(WRS_adjust,function(x) ifelse(x<0.05,\"Positive\",\"Negative\"))
+WRS_dec_lfc<-Map(function(x,y) ifelse(x==\"Positive\"& abs(y)>log(1.5),\"Positive\",\"Negative\"),WRS_dec,log_fold_change)
+names(WRS_dec_lfc)<-levels(dose_level)[2:9]
+names(WRS_dec)<-levels(dose_level)[2:9]
+
+
+sig_WRS<-(union(which(WRS_dec[[\"0.01\"]]==\"Positive\"),union(which(WRS_dec[[\"0.03\"]]==\"Positive\"),union(which(WRS_dec[[\"0.1\"]]==\"Positive\"),union(which(WRS_dec[[\"0.3\"]]==\"Positive\"),union(which(WRS_dec[[\"1\"]]==\"Positive\"),union(which(WRS_dec[[\"3\"]]==\"Positive\"),union(which(WRS_dec[[\"10\"]]==\"Positive\"),which(WRS_dec[[\"30\"]]==\"Positive\")))))))))
+length(sig_WRS)
+sig_WRS<-rownames(data[[\"0\"]])[sig_WRS]
+sig_WRS_lfc<-(union(which(WRS_dec_lfc[[\"0.01\"]]==\"Positive\"),union(which(WRS_dec_lfc[[\"0.03\"]]==\"Positive\"),union(which(WRS_dec_lfc[[\"0.1\"]]==\"Positive\"),union(which(WRS_dec_lfc[[\"0.3\"]]==\"Positive\"),union(which(WRS_dec_lfc[[\"1\"]]==\"Positive\"),union(which(WRS_dec_lfc[[\"3\"]]==\"Positive\"),union(which(WRS_dec_lfc[[\"10\"]]==\"Positive\"),which(WRS_dec_lfc[[\"30\"]]==\"Positive\")))))))))
+length(sig_WRS_lfc)
+sig_WRS_lfc<-rownames(data[[\"0\"]])[sig_WRS_lfc]
+
+true_dec<-ifelse(simulated.gene.metadata$Model!=\"Unchanged\",\"Positive\",\"Negative\")
+pred_dec_WRS_comb<-ifelse(rownames(simulated.gene.metadata)%in%sig_WRS == TRUE,\"Positive\",\"Negative\")
+pred_dec_WRS_comb_lfc<-ifelse(rownames(simulated.gene.metadata)%in%sig_WRS_lfc == TRUE,\"Positive\",\"Negative\")
+caret::confusionMatrix(factor(pred_dec_WRS_comb,levels=c(\"Positive\",\"Negative\")),factor(true_dec,levels = c(\"Positive\",\"Negative\")))
+caret::confusionMatrix(factor(pred_dec_WRS_comb_lfc,levels=c(\"Positive\",\"Negative\")),factor(true_dec,levels = c(\"Positive\",\"Negative\")))
+```"

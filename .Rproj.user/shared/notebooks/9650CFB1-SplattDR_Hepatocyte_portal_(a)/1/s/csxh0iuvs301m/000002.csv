@@ -1,0 +1,26 @@
+"0","```r
+#Calculate log fold change pairwise
+log_fold_change<-rep(list(vector(mode = \"numeric\",
+                             length = nrow(data[[\"0\"]]))), nlevels(dose_level)-1)
+names(log_fold_change)<-levels(dose_level)[-1]
+for (i in levels(dose_level)[-1])
+{
+  for(k in 1: nrow(data[[\"0\"]]))
+  {
+  log_fold_change[[i]][k] = logFC(data[[\"0\"]][k,],data[[i]][k,])
+  }
+}
+log_fold_change_gene_median<-vector()
+  for (j in 1: nrow(data[[\"0\"]]))
+  {
+    log_fold_change_gene_median[j]<-median(abs(log_fold_change[[\"0.01\"]][j]),
+                                    abs(log_fold_change[[\"0.03\"]][j]),
+                                    abs(log_fold_change[[\"0.1\"]][j]),
+                                    abs(log_fold_change[[\"0.3\"]][j]),
+                                    abs(log_fold_change[[\"1\"]][j]),
+                                    abs(log_fold_change[[\"3\"]][j]),
+                                    abs(log_fold_change[[\"10\"]][j]),
+                                    abs(log_fold_change[[\"30\"]][j]))
+  }
+names(log_fold_change_gene_median)<-rownames(data[[\"0\"]])
+```"

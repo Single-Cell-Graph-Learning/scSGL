@@ -1,0 +1,22 @@
+"0","```r
+true_net_VSC_2000<-as.data.frame(read.csv(\"/Users/satabdisaha/Documents/Documents/Summer_2019/Mouse Liver/BEELINE/BEELINE-data/inputs/Curated/VSC/VSC-2000-1/refNetwork.csv\"))
+true_net_VSC<-matrix(data = 0, nrow = ncol(VSC_2000[[1]]),ncol=ncol(VSC_2000[[1]]))
+true_net_VSC_sign<-matrix(data = 0, nrow = ncol(VSC_2000[[1]]),ncol=ncol(VSC_2000[[1]]))
+dimnames(true_net_VSC) = list(colnames(VSC_2000[[1]]),colnames(VSC_2000[[1]]))
+dimnames(true_net_VSC_sign) = list(colnames(VSC_2000[[1]]),colnames(VSC_2000[[1]]))
+for(i in 1: nrow(true_net_VSC_2000))
+{
+  true_net_VSC[true_net_VSC_2000[i,1],true_net_VSC_2000[i,2]]=1
+  true_net_VSC[true_net_VSC_2000[i,2],true_net_VSC_2000[i,1]]=1
+  true_net_VSC_sign[true_net_VSC_2000[i,1],true_net_VSC_2000[i,2]] = true_net_VSC_2000[i,3]
+  true_net_VSC_sign[true_net_VSC_2000[i,2],true_net_VSC_2000[i,1]] =
+                      true_net_VSC_2000[i,3]
+}
+true_net_VSC_sign<-ifelse(true_net_VSC_sign == \"+\",1,ifelse(true_net_VSC_sign == \"-\",-1,0))
+diag(true_net_VSC_sign)<-0
+diag(true_net_VSC)<-0
+dimnames(true_net_VSC) = list(colnames(VSC_2000[[1]]),colnames(VSC_2000[[1]]))
+dimnames(true_net_VSC_sign) = list(colnames(VSC_2000[[1]]),colnames(VSC_2000[[1]]))
+saveRDS(true_net_VSC,\"/Users/satabdisaha/Documents/Documents/Summer_2019/Mouse Liver/Gene_Regulatory_Networks/Analysis/BEELINE synthetic data/Data/tru_net_VSC.rds\")
+saveRDS(true_net_VSC_sign,\"/Users/satabdisaha/Documents/Documents/Summer_2019/Mouse Liver/Gene_Regulatory_Networks/Analysis/BEELINE synthetic data/Data/tru_net_VSC_signed.rds\")
+```"

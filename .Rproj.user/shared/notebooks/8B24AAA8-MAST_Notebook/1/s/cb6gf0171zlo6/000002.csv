@@ -1,0 +1,44 @@
+"0","```r
+fcHurdle_lfc<-Map(data.frame, fcHurdle,log_fold_change)
+fcHurdleSig_lfc<-rep(list(data.table()),nlevels(Dose)-1)
+names(fcHurdleSig_lfc)<-levels(Dose)[-1]
+for(i in levels(Dose)[-1])
+{
+    colnames(fcHurdle_lfc[[i]])<-c(\"primerid\",\"Pr..Chisq.\",\"fdr\",\"lfc\")
+    fcHurdleSig_lfc[[i]]<-fcHurdle_lfc[[i]][fcHurdle_lfc[[i]]$fdr<0.05
+                            & abs(fcHurdle_lfc[[i]]$lfc) >log(1.5),]
+    setorder(fcHurdleSig_lfc[[i]], fdr)
+}
+
+sig_lfc<-(union(fcHurdleSig_lfc[[\"0.01\"]]$primerid,union(fcHurdleSig_lfc[[\"0.03\"]]$primerid,union(fcHurdleSig_lfc[[\"0.1\"]]$primerid,union(fcHurdleSig_lfc[[\"0.3\"]]$primerid,union(fcHurdleSig_lfc[[\"1\"]]$primerid,union(fcHurdleSig_lfc[[\"3\"]]$primerid,union(fcHurdleSig_lfc[[\"10\"]]$primerid,fcHurdleSig_lfc[[\"30\"]]$primerid))))))))
+pred_dec_MAST_comb_lfc<-ifelse(rownames(simulated.gene.metadata)%in%sig_lfc == TRUE,\"Positive\",\"Negative\")
+caret::confusionMatrix(factor(pred_dec_MAST_comb_lfc,levels=c(\"Positive\",\"Negative\")),factor(true_dec,levels=c(\"Positive\",\"Negative\")))
+```"
+"1","Confusion Matrix and Statistics
+
+          Reference
+Prediction Positive Negative
+  Positive       72      439
+  Negative     1054     9795
+                                          
+               Accuracy : 0.8686          
+                 95% CI : (0.8622, 0.8747)
+    No Information Rate : 0.9009          
+    P-Value [Acc > NIR] : 1               
+                                          
+                  Kappa : 0.0278          
+                                          
+ Mcnemar's Test P-Value : <2e-16          
+                                          
+            Sensitivity : 0.063943        
+            Specificity : 0.957104        
+         Pos Pred Value : 0.140900        
+         Neg Pred Value : 0.902848        
+             Prevalence : 0.099120        
+         Detection Rate : 0.006338        
+   Detection Prevalence : 0.044982        
+      Balanced Accuracy : 0.510523        
+                                          
+       'Positive' Class : Positive        
+                                          
+"

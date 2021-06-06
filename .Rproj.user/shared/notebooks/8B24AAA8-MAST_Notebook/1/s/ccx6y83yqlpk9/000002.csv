@@ -1,0 +1,17 @@
+"0","```r
+suppressPackageStartupMessages({
+    library(ggplot2)
+    library(GGally)
+    library(GSEABase)
+    library(limma)
+    library(reshape2)
+    library(data.table)
+    library(knitr)
+    library(TxDb.Hsapiens.UCSC.hg19.knownGene)
+    library(stringr)
+    library(NMF)
+    library(rsvd)
+    library(RColorBrewer)
+    library(MAST)
+})
+```"

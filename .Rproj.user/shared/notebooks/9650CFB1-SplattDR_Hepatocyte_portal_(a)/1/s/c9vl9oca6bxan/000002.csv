@@ -1,0 +1,13 @@
+"0","```r
+#Create a data list seperating out the data for the dose groups
+data<-rep(list(data.frame()), nlevels(dose_level))
+names(data)<-levels(dose_level)
+for(i in levels(dose_level))
+{
+data[[i]]<- subset(simulated.data_dose
+                   , Dose == i, select = Gene1 : Gene22213 )
+##data[[i]] is a list of all the seperate dose gene*cell matrices
+data[[i]][] <- lapply(data[[i]], function(x) as.numeric(as.character(x)))
+data[[i]]<-t(data[[i]])
+}
+```"

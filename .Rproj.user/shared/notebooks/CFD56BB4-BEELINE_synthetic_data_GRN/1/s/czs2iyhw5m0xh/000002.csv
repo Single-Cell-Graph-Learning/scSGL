@@ -1,0 +1,12 @@
+"0","```r
+#Convert STRING network_mouse to linklist
+library(igraph)
+g<- graph.adjacency(STRING_network_mouse)
+edge_list<-get.edgelist(g)
+colnames(edge_list)<-c(\"Gene1\",\"Gene2\")
+
+write.csv(edge_list,\"~/Documents/Documents/Summer_2019/Mouse_Liver/BEELINE/BEELINE-data/inputs/scRNA-Seq/mESC/refNetwork_500_HVG.csv\",row.names = FALSE,col.names = TRUE)
+
+```"
+"1","attempt to set 'col.names' ignored
+"

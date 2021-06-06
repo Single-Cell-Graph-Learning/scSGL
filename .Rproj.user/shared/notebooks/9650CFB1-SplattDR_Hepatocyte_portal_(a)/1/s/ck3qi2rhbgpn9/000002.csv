@@ -1,0 +1,35 @@
+"0","```r
+library(matrixStats)
+m<-vector()
+sigma_mean<-vector()
+sigma_var<-vector()
+omega_mean<-vector()
+omega_var<-vector()
+for(i in  levels(dose_level))
+{
+  #Dose group specific mean of expression levels for all genes
+  m[i]<-mean(rowMeans(replace(data[[i]], data[[i]] == 0, NA), na.rm = TRUE),na.rm = TRUE)
+  #Dose group specific SD's for all genes
+  sigma_mean[i]<-mean(rowVars(replace(as.matrix(data[[i]]),as.matrix(data[[i]]) == 0, NA), na.rm = TRUE),na.rm = TRUE)
+  sigma_var[i]<-var(rowVars(replace(as.matrix(data[[i]]),as.matrix(data[[i]]) == 0, NA), na.rm = TRUE),na.rm = TRUE)
+  #Dose group specific mean dropout proportions for all genes
+  omega_mean[i]<-mean(apply(data[[i]],1,function(x) length(which(x==0))/length(x)))
+  omega_var[i]<-var(apply(data[[i]],1,function(x) length(which(x==0))/length(x)))
+}
+#Choose the scaling constant tau_mu
+tau_t_mu = tau_c_mu = tau_mu = c(0.5,1,2,3)
+tau_k_mu<-rep(1,9)
+names(tau_k_mu)<- levels(dose_level)
+#Use sigma_mean and sigma_var to solve for b_sigma and a_sigma
+b_sigma = 1
+a_sigma = 6
+#Use mean and variance of omega to solve for a_w and b_w
+#We keep the same values of a_w and b_w for all groups since the omega mean and omega SD values are more or less consistent.
+a_w = a_t_w = 0.8 #t refers to the treatment groups
+b_w = b_t_w = 0.2
+#length(which(simulated.gene.metadata$Category == \"Positive\"))
+prop_DE<-length(which(simulated.gene.metadata$Model != \"Unchanged\"))/length(simulated.gene.metadata$Model)
+# Calculate prior_Null for all three approaches local,global,multiplicity corrected
+prior_Null<- c( (1-prop_DE), 0.9 ,((1-prop_DE)^(2/length(simulated.gene.metadata$Model))))
+prior_Alter<-1-prior_Null
+```"

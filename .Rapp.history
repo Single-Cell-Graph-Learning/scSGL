@@ -1,0 +1,10 @@
+load("/Users/satabdisaha/Documents/Documents/Summer_2019/scSGL/scSGL/simulation_scLinkrep-nc10-rho0.07.rds")
+load("/Users/satabdisaha/Documents/Documents/Summer_2019/scSGL/scSGL/simulation_scLinkrep-nc2-rho0.16.rds")
+load("/Users/satabdisaha/Documents/Documents/Summer_2019/scSGL/scSGL/simulation_scLinkrep-nc3-rho0.5.rds")
+load("/Users/satabdisaha/Documents/Documents/Summer_2019/scSGL/scSGL/simulation_scLinkrep-nc2-rho0.07.rds")
+load("/Users/satabdisaha/Documents/Documents/Summer_2019/scSGL/scSGL/simulation_scLinkrep-nc2-rho0.1.rds")
+load("/Users/satabdisaha/Documents/Documents/Summer_2019/scSGL/scSGL/simulation_scLinkrep-nc3-rho0.16.rds")
+<<<<<<< Updated upstream
+load("/Users/satabdisaha/Documents/Documents/Summer_2019/scSGL/scSGL/simulation_scLinkrep-nc3-rho0.9.rds")
+=======
+>>>>>>> Stashed changes

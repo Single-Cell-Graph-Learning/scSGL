@@ -1,0 +1,12 @@
+"0","```r
+# library
+#Confusion Matrix Plot
+library(ggplot2)
+# create a dataset
+dose <- c(rep(0.01 , 4) , rep(0.03 , 4) , rep(0.1 , 4) , rep(0.3 , 4) , rep(1 , 4),rep(3 , 4) ,
+            rep(10 , 4),rep(30 , 4)  )
+type <- rep(c(\"TP\" , \"FP\" , \"FN\",\"TN\") , 8)
+value1<-c(30,4,538,682,49,2,519,684,73,6,495,680,111,13,457,673,
+          190,61,378,625,308,266,260,420,484,574,84,112,566,686,2,0)
+cf <- data.frame(dose,type,value1,value2)
+```"

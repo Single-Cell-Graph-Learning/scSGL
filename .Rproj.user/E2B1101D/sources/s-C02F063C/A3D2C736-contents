@@ -1,0 +1,35 @@
+#network is a p*p adjacency matrix where p is the number of genes
+#' Title : Simulate a correlation matrix given an adjacency matrix
+#'
+#' @param network : An adjacency matrix having values {-1,0,1}
+#'
+#' @return  cormat : A partial correlation matrix
+#' @export
+#'
+#' @examples
+generate.cormat=function(network){
+  cormat<-matrix(data=NA,nrow=nrow(network),ncol=ncol(network))
+  # Generate covariance matrix
+  for(i in 1:nrow(network)){
+    for(j in 1:nrow(network)){
+      if(i > j){
+        if(network [i,j] == -1){
+          cormat[i,j] =runif(1,-0.7,-0.4) 
+          cormat[j,i] = cormat[i,j]
+        }
+        else if (network [i,j] == +1){
+          cormat[i,j] =runif(1,0.4,0.7)
+          cormat[j,i] = cormat[i,j]
+        }
+        else {
+          cormat[i,j] = 0
+          cormat[j,i] = cormat[i,j]
+        }
+      }
+      if (i == j){
+        cormat[i,j] = cormat[j,i] = 1
+      }
+    }
+  }
+  return(cormat)
+}

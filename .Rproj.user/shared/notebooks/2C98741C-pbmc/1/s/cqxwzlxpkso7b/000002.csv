@@ -1,0 +1,7 @@
+"0","library(Seurat)"
+"0","cell_labels_pbmc<-as.vector(Idents(pbmc))"
+"0","length(cell_labels_pbmc)"
+"1","[1]"
+"1"," 2638"
+"1","
+"
