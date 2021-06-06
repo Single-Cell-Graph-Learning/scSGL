@@ -2,6 +2,10 @@ notebooks/meetings/
 workspace.code-workspace
 .vscode/
 test.py
+notebooks/
+real_data_analysis.py
+.Rhistory
+data/outputs/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
