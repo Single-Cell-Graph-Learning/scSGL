@@ -1,12 +1,9 @@
-<<<<<<< Updated upstream
-notebooks/meetings/
 workspace.code-workspace
 .vscode/
 test.py
 notebooks/
 real_data_analysis.py
-.Rhistory
-data/outputs/
+data/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -137,9 +134,8 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-=======
 .Rproj.user
 .Rhistory
 .RData
 .Ruserdata
->>>>>>> Stashed changes
+.Rapp.history
