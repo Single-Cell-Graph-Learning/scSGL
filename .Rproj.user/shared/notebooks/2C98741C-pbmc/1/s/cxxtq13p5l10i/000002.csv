@@ -1,3 +1,0 @@
-"0","# note that you can set `label = TRUE` or use the LabelClusters function to help label"
-"0","# individual clusters"
-"0","DimPlot(pbmc, reduction = ""umap"")"

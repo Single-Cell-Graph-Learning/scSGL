@@ -1,2 +1,0 @@
-"0","# Visualize QC metrics as a violin plot"
-"0","VlnPlot(pbmc, features = c(""nFeature_RNA"", ""nCount_RNA"", ""percent.mt""), ncol = 3)"

@@ -1,8 +1,0 @@
-"0","```r
-library(MAST)
-scaRaw <- FromMatrix(as.matrix(simulated.data), as.data.frame(simulated.cell.metadata), as.data.frame(simulated.gene.metadata))
-```"
-"1","`fData` has no primerid.  I'll make something up.
-`cData` has no wellKey.  I'll make something up.
-Assuming data assay in position 1, with name et is log-transformed.
-"

@@ -1,2 +1,0 @@
-"0","# you can plot raw counts as well"
-"0","VlnPlot(pbmc, features = c(""NKG7"", ""PF4""), slot = ""counts"", log = TRUE)"

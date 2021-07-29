@@ -1,5 +1,0 @@
-"0","plot1 + plot2
-"
-"2","Error in grid.Call(C_convert, x, as.integer(whatfrom), as.integer(whatto),  : 
-  Viewport has zero dimension(s)
-"

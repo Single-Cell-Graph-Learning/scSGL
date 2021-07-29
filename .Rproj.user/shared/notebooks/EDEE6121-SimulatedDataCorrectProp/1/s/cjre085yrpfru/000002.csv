@@ -1,7 +1,0 @@
-"0","```r
-my_data_kruskal_pred_dec_lfc<-ifelse(my_data_kruskal_pred_dec==\"Positive\"
-       &abs(log_fold_change)>log(1.5),\"Positive\",\"Negative\")
-
-```"
-"1","longer object length is not a multiple of shorter object length
-"

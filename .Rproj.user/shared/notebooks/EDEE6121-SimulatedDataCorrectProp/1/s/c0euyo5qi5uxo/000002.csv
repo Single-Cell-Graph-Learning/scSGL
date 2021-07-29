@@ -1,9 +1,0 @@
-"0","```r
-simulated.data<-read.csv(\"~/Documents/Documents/Summer_2019/Mouse_Liver/Rance/snSeq-DGE/SplattDR/normexp_splattdr.txt\", sep=\"\")
-simulated.cell.metadata<-read.csv(\"~/Documents/Documents/Summer_2019/Mouse_Liver/Rance/snSeq-DGE/SplattDR/cellMeta_splattdr.txt\", sep=\"\")
-simulated.gene.metadata<-read.csv(\"~/Documents/Documents/Summer_2019/Mouse_Liver/Rance/snSeq-DGE/SplattDR/geneMeta_splattdr.txt\", sep=\"\")
-a=apply(simulated.data,1, function(x) length(which(x==0)))
-b<-which(a==ncol(simulated.data))
-simulated.data<-simulated.data[-b,]
-simulated.gene.metadata<-simulated.gene.metadata[-b,]
-```"

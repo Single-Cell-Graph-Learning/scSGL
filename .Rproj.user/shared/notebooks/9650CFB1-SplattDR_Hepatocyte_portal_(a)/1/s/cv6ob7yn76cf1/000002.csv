@@ -1,9 +1,0 @@
-"0","```r
-#dose_levels of simulated data
-dose_level<-factor(simulated.cell.metadata$Dose)
-#Create a joint data-frame with cells as rows, columns as genes and last column as
-#Dose group
-simulated.data_dose<-data.frame(t(as.matrix(simulated.data)),
-                                              simulated.cell.metadata[,\"Dose\"])
-colnames(simulated.data_dose)[ncol(simulated.data_dose)]<-\"Dose\"
-```"

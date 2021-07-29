@@ -1,6 +1,0 @@
-"0","library(dplyr)"
-"0","top150 <- pbmc.markers %>% group_by(cluster) %>% top_n(n = 150, wt = avg_log2FC)"
-"2","Registered S3 method overwritten by 'cli':
-  method     from         
-  print.boxx spatstat.geom
-"

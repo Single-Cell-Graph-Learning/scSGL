@@ -1,5 +1,0 @@
-"0","```r
-normalized_clust1_short <- read.delim(\"~/Documents/Documents/Summer_2019/Mouse_Liver/Rance/SampleData/normalized_clust1_short.txt\", header=TRUE)
-gene_metadata_clust1_short <- read.csv(\"~/Documents/Documents/Summer_2019/Mouse_Liver/Rance/SampleData/gene_metadata_clust1_short.txt\", row.names=1, sep=\"\")
-cell_metadata_clust1 <- read.delim(\"~/Documents/Documents/Summer_2019/Mouse_Liver/Rance/SampleData/cell_metadata_clust1.txt\", row.names=1)
-```"

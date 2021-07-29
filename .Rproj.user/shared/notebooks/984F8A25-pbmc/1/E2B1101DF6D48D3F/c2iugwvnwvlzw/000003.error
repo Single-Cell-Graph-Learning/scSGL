@@ -1,1 +1,0 @@
-{"frames":[{"func":"DoHeatmap(pbmc, features = top10$gene)","file":"","line_number":0,"end_line_number":0,"character_number":0,"end_character_number":0},{"func":"features %||% VariableFeatures(object = object)","file":"","line_number":0,"end_line_number":0,"character_number":0,"end_character_number":0}],"message":"Error in top10$gene : $ operator is invalid for atomic vectors\n"}
