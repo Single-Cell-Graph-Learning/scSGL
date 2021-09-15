@@ -11,12 +11,19 @@ def _shuffle_columns(ct):
     for c in range(n_cols):
         np.random.shuffle(ct[:, c])
 
+@numba.jit(nopython=True)
+def _shuffle_rows(ct):
+    # Shuffle rows of a matrix in place
+    n_rows = ct.shape[1]
+    for c in range(n_rows):
+        np.random.shuffle(ct[c, :])
+
 def _permutations(counts, assoc_fun, k, tau_neg, tau_pos):
     # Returns tau_neg and tau_pos percentile of the assocition values in surrogate data
 
-    ct = counts.copy()
     thresholds = np.zeros((len(tau_neg), k, 2))
     for p in range(k):
+        ct = counts.copy()
         _shuffle_columns(ct)
         rho_rnd = assoc_fun(ct)
         rho_rnd = rho_rnd[np.triu_indices_from(rho_rnd, k=1)]

@@ -4,8 +4,8 @@ from . import utils
 
 def calc(counts):
     # TODO: Docstring
-    
-    return np.corrcoef(counts)
+    K = counts@counts.T
+    return K
 
 def permutations(counts, k, tau_neg, tau_pos):
     # TODO: Docstring

@@ -1,9 +1,10 @@
 workspace.code-workspace
 .vscode/
 test.py
-notebooks/
+notebooks_/
 real_data_analysis.py
-data/
+data_/
+.DS_Store
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

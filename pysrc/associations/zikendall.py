@@ -3,6 +3,7 @@ from itertools import combinations
 import numba
 from numba.np.ufunc import parallel
 import numpy as np
+from numpy.core.numeric import count_nonzero
 
 from scipy import stats
 
@@ -12,7 +13,8 @@ from rpy2 import robjects
 from rpy2.robjects.packages import importr
 from rpy2.robjects import numpy2ri
 numpy2ri.activate()
-dismay = importr("dismay")
+# dismay = importr("dismay")
+pcapp = importr("pcaPP")
 
 @numba.njit
 def _calc_kendall(x, y):
@@ -80,9 +82,27 @@ def _calc_p(counts):
 
     return results
 
+def _nonzero_kendall(X):
+    n_samples = X.shape[0]
+    result = np.eye(n_samples)
+    for i in range(n_samples):
+        x = X[i, :]
+        sorting_indices = np.argsort(x)
+        x = x[sorting_indices]
+        for j in range(i+1, n_samples):
+            y = X[j, :]
+            y = y[sorting_indices]
+            nnzeros = (x != 0) & (y != 0)
+
+            result[i, j] = pcapp.cor_fk(x[nnzeros], y[nnzeros])
+            result[j, i] = result[i, j]
+
+    return result
+
 def calc(counts):
-    tau11 = dismay.cor_fk_nz(counts.T)
-    
+    # tau11 = dismay.cor_fk_nz(counts.T)
+    tau11 = _nonzero_kendall(counts)
+
     n_samples = counts.shape[1]
     
     nz = counts != 0
@@ -94,7 +114,7 @@ def calc(counts):
     p1 = _calc_p(counts)
 
     if np.any(np.isnan(tau11)):
-        print("tau has nan")
+        tau11[np.isnan(tau11)] = 0
 
     return p11**2 * tau11 + 2*(p00*p11 - p01*p10) + 2*p11*(p10*(1 - 2*p1) + p01*(1 - 2*p1.T))
 
