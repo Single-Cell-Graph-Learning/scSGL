@@ -64,8 +64,9 @@ def _l_step(y, P, alpha, rho, n, m):
     return y - (n + np.sum(y))/m
 
 
-def learn(k, d, alpha1, alpha2, rho=10, max_iter=1000, lpos_init=None, lneg_init=None):
+def learn(k, d, alpha1, alpha2, rho=10, max_iter=10000, lpos_init=None, lneg_init=None):
     # TODO: Docstring and clean
+    # TODO: What is optimal rho
 
     rng = np.random.default_rng()
 
@@ -142,4 +143,4 @@ def learn(k, d, alpha1, alpha2, rho=10, max_iter=1000, lpos_init=None, lneg_init
     w[w>-1e-4] = 0
     v = np.abs(v)
     w = np.abs(w)
-    return v, w, lagrangian
+    return v, w

@@ -5,14 +5,86 @@ import pandas as pd
 
 from scipy.spatial.distance import squareform
 
-from .signedgl import learn
+from . import unsigned
+from . import signed
 from ..associations import correlation, dotprod, proprho, zikendall
 
-def learn_signed_graph(X, pos_density, neg_density, assoc="dotprod", gene_names = None, 
-                       rho=10, max_iter=5000, verbose=False):
+def _binary_search(k, d, density_pos, density_neg):
+    apos_done = False
+    aneg_done = False
 
-    # TODO If postive or negative density is zero, run a different algorithm
-    # TODO Input check
+    apos_min = 0
+    aneg_min = 0
+
+    # TODO: Find better upper bound
+    if density_pos > 0:
+        apos_max = 100
+    else:
+        apos_max = 0
+        apos_done = True
+        wpos = np.zeros((len(k, 1)))
+
+    if density_neg > 0:
+        aneg_max = 100
+    else:
+        aneg_max = 0
+        aneg_done = True
+        wneg = np.zeros((len(k, 1)))
+
+    densities_pos = np.zeros(50)
+    densities_neg = np.zeros(50)
+    for i in range(50):
+        apos = (apos_min + apos_max)/2
+        aneg = (aneg_min + aneg_max)/2
+
+        if aneg == 0: # Learn only positive edges
+            wpos = unsigned.learn(k, d, apos)
+            densities_pos[i] = np.count_nonzero(wpos)/len(wpos)
+        elif apos == 0: # Learn only negative edges
+            wneg = unsigned.learn(-k, d, aneg)
+            densities_neg[i] = np.count_nonzero(wneg)/len(wneg)
+        else: 
+            wpos, wneg= signed.learn(k, d, apos, aneg, lpos_init="zeros", 
+                lneg_init="zeros")
+            densities_pos[i] = np.count_nonzero(wpos)/len(wpos)
+            densities_neg[i] = np.count_nonzero(wneg)/len(wneg)
+
+        # Check if desired density is obtained for positive part
+        if not apos_done:
+            if np.abs(density_pos - densities_pos[i]) < 1e-2:
+                apos_done = True
+            elif density_pos > densities_pos[i]:
+                apos_max = apos
+            elif density_pos < densities_pos[i]:
+                apos_min = apos
+
+        # Check if desired density is obtained for negative part
+        if not aneg_done:
+            if np.abs(density_neg - densities_neg[i]) < 1e-2:
+                aneg_done = True
+            elif density_neg > densities_neg[i]:
+                aneg_max = aneg
+            elif density_neg < densities_neg[i]:
+                aneg_min = aneg
+
+        # If desired densities are obtained, break
+        if (apos_done and aneg_done):
+            break
+
+        # If binary search stuck, break
+        if i>2:
+            if np.abs(densities_pos[i] - densities_pos[i-1]) < 1e-6 and \
+            np.abs(densities_pos[i-1] - densities_pos[i-2]) < 1e-6 and \
+            np.abs(densities_neg[i] - densities_neg[i-1]) < 1e-6 and \
+            np.abs(densities_neg[i-1] - densities_neg[i-2]) < 1e-6:
+                break
+
+    return wpos, -wneg   
+
+def learn_signed_graph(X, pos_density, neg_density, assoc="dotprod", gene_names = None, 
+                       verbose=False):
+    # TODO: Docstring
+    # TODO: Input check
 
     assocs = {"dotprod": dotprod.calc,
               "correlation": correlation.calc,
@@ -37,59 +109,16 @@ def learn_signed_graph(X, pos_density, neg_density, assoc="dotprod", gene_names 
         print("Estimating a graph whose positive and negative edges densities are",
               "{:.3f} and {:.3f}...".format(pos_density, neg_density))
 
-    apos_min = 0.0
-    aneg_min = 0.0
-    apos_max = 100.0 # TODO : Need to find upper bound
-    aneg_max = 100.0 
-    apos_done = False
-    aneg_done = False
-    densities_pos = np.zeros(50)
-    densities_neg = np.zeros(50)
-    for i in range(50): # Binary search
-        apos = (apos_min + apos_max)/2
-        aneg = (aneg_min + aneg_max)/2
-    
-        lpos, lneg, l = learn(k, d, apos, aneg, rho=rho, max_iter=max_iter, lpos_init="zeros", 
-            lneg_init="zeros") # TODO: Clean
+    wpos, wneg = _binary_search(k, d, pos_density, neg_density)
 
-        densities_pos[i] = np.count_nonzero(lpos)/len(lpos)
-        densities_neg[i] = np.count_nonzero(lneg)/len(lneg)
-
-        # Check if desired density is obtained for positive part
-        if not apos_done:
-            if np.abs(pos_density - densities_pos[i]) < 1e-2:
-                apos_done = True
-            elif pos_density > densities_pos[i]:
-                apos_max = apos
-            elif pos_density < densities_pos[i]:
-                apos_min = apos
-
-        # Check if desired density is obtained for negative part
-        if not aneg_done:
-            if np.abs(neg_density - densities_neg[i]) < 1e-2:
-                aneg_done = True
-            elif neg_density > densities_neg[i]:
-                aneg_max = aneg
-            elif neg_density < densities_neg[i]:
-                aneg_min = aneg
-
-        # If desired densities are obtained, break
-        if (apos_done and aneg_done):
-            break
-
-        # If binary search stuck, break
-        if i>2:
-            if np.abs(densities_pos[i] - densities_pos[i-1]) < 1e-6 and \
-               np.abs(densities_pos[i-1] - densities_pos[i-2]) < 1e-6 and \
-               np.abs(densities_neg[i] - densities_neg[i-1]) < 1e-6 and \
-               np.abs(densities_neg[i-1] - densities_neg[i-2]) < 1e-6:
-                break
+    pos_density_est = np.count_nonzero(wpos)/len(wpos)
+    neg_density_est = np.count_nonzero(wneg)/len(wneg)
 
     if verbose:
         print("Graph is found. Its positive and negative edge densities are {:.3f} and {:.3f}"\
-            .format(densities_pos[i], densities_neg[i]))
+            .format(pos_density_est, neg_density_est))
 
-    return convert_df(gene_names[nnzeros], lpos, lneg)
+    return convert_df(gene_names[nnzeros], wpos, wneg)
 
 def convert_df(gene_names, lpos, lneg):
     gene1 = [i for i, _ in permutations(gene_names, r=2)]
