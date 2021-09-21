@@ -1,5 +1,5 @@
 # scSGL
-Signed Graph Learning for single cell RNA-seq data
+Graph signal processing based signed graph learning for gene regulatory inference from single cell RNA-seq data as described in [1].
 
 ## Installation
 Once you download the repo, go to the repo directory and start a terminal. First, create an 
@@ -23,3 +23,6 @@ Please see `demo.ipynb` under notebooks folder for an illustration how to use co
 An example dataset is given under data folder to be used demonstration notebook. For datasets used 
 in the paper, please [BEELINE](https://github.com/Murali-group/Beeline). Datasets used for parameter
 sensitivity will be published soon. 
+
+## References
+[1] [scSGL: Signed Graph Learning for Single-Cell Gene Regulatory Network Inference](https://www.biorxiv.org/content/10.1101/2021.07.08.451697v2.abstract)
