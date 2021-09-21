@@ -44,7 +44,7 @@ def learn(k, d, alpha):
     n = len(d) # number of nodes
     m = len(k) # number of node pairs
 
-    S = rowsum_matrix(n)
+    S = rowsum_matrix.rowsum_matrix(n)
 
     # ADMM Parameter
     rho = 1 

@@ -9,6 +9,13 @@ from . import unsigned
 from . import signed
 from ..associations import correlation, dotprod, proprho, zikendall
 
+def _find_bs_upper_bound(k, d, density):
+    for i in range(1, 100):
+        w = unsigned.learn(k, d, i)
+        densities_est = np.count_nonzero(w)/len(w)
+        if densities_est > density:
+            return i
+
 def _binary_search(k, d, density_pos, density_neg):
     apos_done = False
     aneg_done = False
@@ -18,14 +25,14 @@ def _binary_search(k, d, density_pos, density_neg):
 
     # TODO: Find better upper bound
     if density_pos > 0:
-        apos_max = 100
+        apos_max = _find_bs_upper_bound(k, d, density_pos)
     else:
         apos_max = 0
         apos_done = True
         wpos = np.zeros((len(k, 1)))
 
     if density_neg > 0:
-        aneg_max = 100
+        aneg_max = _find_bs_upper_bound(k, d, density_neg)
     else:
         aneg_max = 0
         aneg_done = True
@@ -49,22 +56,24 @@ def _binary_search(k, d, density_pos, density_neg):
             densities_pos[i] = np.count_nonzero(wpos)/len(wpos)
             densities_neg[i] = np.count_nonzero(wneg)/len(wneg)
 
+        # print("Current densities: {:.2f}    {:.2f}".format(densities_pos[i], densities_neg[i]))
+
         # Check if desired density is obtained for positive part
         if not apos_done:
             if np.abs(density_pos - densities_pos[i]) < 1e-2:
                 apos_done = True
-            elif density_pos > densities_pos[i]:
-                apos_max = apos
             elif density_pos < densities_pos[i]:
+                apos_max = apos
+            elif density_pos > densities_pos[i]:
                 apos_min = apos
 
         # Check if desired density is obtained for negative part
         if not aneg_done:
             if np.abs(density_neg - densities_neg[i]) < 1e-2:
                 aneg_done = True
-            elif density_neg > densities_neg[i]:
-                aneg_max = aneg
             elif density_neg < densities_neg[i]:
+                aneg_max = aneg
+            elif density_neg > densities_neg[i]:
                 aneg_min = aneg
 
         # If desired densities are obtained, break
@@ -73,10 +82,10 @@ def _binary_search(k, d, density_pos, density_neg):
 
         # If binary search stuck, break
         if i>2:
-            if np.abs(densities_pos[i] - densities_pos[i-1]) < 1e-6 and \
-            np.abs(densities_pos[i-1] - densities_pos[i-2]) < 1e-6 and \
-            np.abs(densities_neg[i] - densities_neg[i-1]) < 1e-6 and \
-            np.abs(densities_neg[i-1] - densities_neg[i-2]) < 1e-6:
+            if np.abs(densities_pos[i] - densities_pos[i-1]) < 1e-3 and \
+            np.abs(densities_pos[i] - densities_pos[i-2]) < 1e-3 and \
+            np.abs(densities_neg[i] - densities_neg[i-1]) < 1e-3 and \
+            np.abs(densities_neg[i] - densities_neg[i-2]) < 1e-3:
                 break
 
     return wpos, -wneg   
@@ -100,9 +109,9 @@ def learn_signed_graph(X, pos_density, neg_density, assoc="dotprod", gene_names 
 
     # Calculate association matrix
     K = assocs[assoc](X_nnzeros)
-    K /= np.max(np.abs(K)) # normalize
-    k = K[np.triu_indices_from(K)]
-    d = np.diag(K)
+    k = K[np.triu_indices_from(K, k=1)]
+    k /= np.max(np.abs(k))
+    d = np.diag(K)/np.max(np.abs(k))
 
     # Learn graph with desired density
     if verbose:
@@ -123,7 +132,7 @@ def learn_signed_graph(X, pos_density, neg_density, assoc="dotprod", gene_names 
 def convert_df(gene_names, lpos, lneg):
     gene1 = [i for i, _ in permutations(gene_names, r=2)]
     gene2 = [j for _, j in permutations(gene_names, r=2)]
-    L = squareform(np.squeeze(lpos - lneg))
+    L = squareform(np.squeeze(lpos + lneg))
     edge_weights = [L[i, j] for i, j in permutations(range(len(gene_names)), r=2) if i != j]
 
     grn_df = pd.DataFrame({"Gene1": gene1, "Gene2": gene2, "EdgeWeight": edge_weights})
