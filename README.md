@@ -25,7 +25,7 @@ Please see `demo.ipynb` under notebooks folder for an illustration about how to 
 
 ## Datasets
 An example dataset is given under data folder to be used in the demonstration notebook. For datasets used 
-in the paper, please [BEELINE](https://github.com/Murali-group/Beeline). Datasets used for parameter
+in the paper, please see [BEELINE](https://github.com/Murali-group/Beeline). Datasets used for parameter
 sensitivity will be published soon. 
 
 ## References
