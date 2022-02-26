@@ -80,3 +80,63 @@ def learn(k, d, alpha):
         b = b[..., None]
     
     return _qp_admm(b, inv_mat_part1, inv_mat_part2, rho)
+
+def learn_ladmm(k, d, alpha1, alpha2, degree_reg="l2"):
+    # TODO: Docstring
+    # TODO: Extension to the case where some edges are known to be zero
+
+    n = len(d) # number of nodes
+    m = len(k) # number of node pairs
+
+    # Convert k and d to column vectors
+    if np.ndim(k) == 1:
+        k = k[..., None]
+
+    if np.ndim(d) == 1:
+        d = d[..., None]
+
+    # Check if degree regularization is correct-+*
+    if degree_reg not in ["lb", "l2"]:
+        raise ValueError(
+            "The input argument 'degree_reg' must be either 'l2' or 'lb'."
+        )
+
+    S = rowsum_matrix(n)
+
+    rho = .1
+    mu = 1/(0.9/(rho*(2*(n-1))))
+
+    rng = np.random.default_rng()
+    w = _project_hyperplane(rng.uniform(low=0, high=1, size=(n, 1)), -n)
+    y = np.zeros((n, 1))
+    l = rng.uniform(low=-1, high=0, size=(m, 1))
+
+    primal_res = np.zeros(1000)
+    dual_res = np.zeros(1000)
+    for iter in range(1000):
+        # l-step
+        l = np.asarray(S.T@(d - rho*w - y - rho*S@l) - 2*k + mu*l)/(2*alpha2+mu)
+        l[l>0] = 0
+
+        # w-step
+        w_old = w.copy()
+        if degree_reg == "l2":
+            w = - np.asarray(rho*S@l + y)/(2*alpha1 + rho)
+            w = _project_hyperplane(w, -n)
+        elif degree_reg == "lb":
+            b = np.asarray(y + rho*S@l)
+            w = (- b + np.sqrt(b**2 + 4*rho*alpha1))/(2*rho)
+
+        # update y
+        y += rho*np.asarray(S@l + w)
+
+        # Calculate residuals
+        primal_res[iter] = np.linalg.norm(rho*S.T@(w-w_old))
+        dual_res[iter] = np.linalg.norm(S@l + w)
+
+        if iter > 10:
+            if primal_res[iter] < 1e-4 and dual_res[iter] < 1e-4:
+                break
+
+    l[l>-1e-4] = 0
+    return np.abs(l) # Return adjacency 
