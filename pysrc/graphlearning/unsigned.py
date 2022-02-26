@@ -72,7 +72,7 @@ def learn(k, d, alpha):
     c1 = 1/a
     c2 = b/(a*(a+n*b-2*b))
     c3 = 4*b**2/(a*(a+2*n*b-2*b)*(a+n*b-2*b))
-    inv_mat_part1 = c1*sp.eye(m) - c2*S.T@S
+    inv_mat_part1 = c1*sp.sparse.eye(m) - c2*S.T@S
     inv_mat_part2 = lambda x : c3*np.sum(x)*np.ones((m, 1))
 
     b = S.T@d - 2*k
