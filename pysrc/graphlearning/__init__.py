@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+import time
+
 from itertools import permutations
 
 import numpy as np
@@ -27,13 +29,16 @@ from . import signed
 from ..associations import correlation, dotprod, proprho, zikendall
 
 def _find_bs_upper_bound(k, d, density):
-    for i in range(1, 100):
-        w = unsigned.learn(k, d, i)
+    i = 5
+    while True:
+        w = unsigned.learn_ladmm(k, d, i, i)
         densities_est = np.count_nonzero(w)/len(w)
         if densities_est > density:
             return i
+        else:
+            i *= 1.5
 
-def _binary_search(k, d, density_pos, density_neg):
+def _binary_search(k, d, density_pos, density_neg, verbose):
     apos_done = False
     aneg_done = False
 
@@ -49,7 +54,7 @@ def _binary_search(k, d, density_pos, density_neg):
         wpos = np.zeros((len(k, 1)))
 
     if density_neg > 0:
-        aneg_max = _find_bs_upper_bound(k, d, density_neg)
+        aneg_max = _find_bs_upper_bound(-k, -d, density_neg)
     else:
         aneg_max = 0
         aneg_done = True
@@ -57,10 +62,12 @@ def _binary_search(k, d, density_pos, density_neg):
 
     densities_pos = np.zeros(50)
     densities_neg = np.zeros(50)
+    run_time = []
     for i in range(50):
         apos = (apos_min + apos_max)/2
         aneg = (aneg_min + aneg_max)/2
 
+        st = time.time()
         if aneg == 0: # Learn only positive edges
             wpos = unsigned.learn(k, d, apos)
             densities_pos[i] = np.count_nonzero(wpos)/len(wpos)
@@ -72,8 +79,11 @@ def _binary_search(k, d, density_pos, density_neg):
                 lneg_init="zeros")
             densities_pos[i] = np.count_nonzero(wpos)/len(wpos)
             densities_neg[i] = np.count_nonzero(wneg)/len(wneg)
+        run_time.append(time.time()-st)
 
-        # print("Current densities: {:.2f}    {:.2f}".format(densities_pos[i], densities_neg[i]))
+        if verbose:
+            print("Binary Search, current densities: {:.2f}    {:.2f}".format(
+                densities_pos[i], densities_neg[i]))
 
         # Check if desired density is obtained for positive part
         if not apos_done:
@@ -105,10 +115,10 @@ def _binary_search(k, d, density_pos, density_neg):
             np.abs(densities_neg[i] - densities_neg[i-2]) < 1e-3:
                 break
 
-    return wpos, -wneg   
+    return wpos, -wneg, run_time
 
 def learn_signed_graph(X, pos_density, neg_density, assoc="dotprod", gene_names = None, 
-                       verbose=False):
+                       return_run_time=False, verbose=False):
     # TODO: Docstring
     # TODO: Input check
 
@@ -125,17 +135,21 @@ def learn_signed_graph(X, pos_density, neg_density, assoc="dotprod", gene_names 
     X_nnzeros = X[nnzeros, :]
 
     # Calculate association matrix
+    st = time.time()
     K = assocs[assoc](X_nnzeros)
     k = K[np.triu_indices_from(K, k=1)]
     k /= np.max(np.abs(k))
     d = np.diag(K)/np.max(np.abs(k))
+    kernel_cons_time = time.time() - st
 
     # Learn graph with desired density
     if verbose:
         print("Estimating a graph whose positive and negative edges densities are",
               "{:.3f} and {:.3f}...".format(pos_density, neg_density))
 
-    wpos, wneg = _binary_search(k, d, pos_density, neg_density)
+    wpos, wneg, run_time = _binary_search(k, d, pos_density, neg_density, verbose)
+
+    run_time = np.array(run_time) + kernel_cons_time
 
     pos_density_est = np.count_nonzero(wpos)/len(wpos)
     neg_density_est = np.count_nonzero(wneg)/len(wneg)
@@ -144,7 +158,10 @@ def learn_signed_graph(X, pos_density, neg_density, assoc="dotprod", gene_names 
         print("Graph is found. Its positive and negative edge densities are {:.3f} and {:.3f}"\
             .format(pos_density_est, neg_density_est))
 
-    return convert_df(gene_names[nnzeros], wpos, wneg)
+    if return_run_time:
+        return convert_df(gene_names[nnzeros], wpos, wneg), run_time
+    else:
+        return convert_df(gene_names[nnzeros], wpos, wneg)
 
 def convert_df(gene_names, lpos, lneg):
     gene1 = [i for i, _ in permutations(gene_names, r=2)]

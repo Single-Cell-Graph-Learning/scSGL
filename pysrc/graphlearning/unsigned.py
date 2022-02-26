@@ -101,7 +101,7 @@ def learn_ladmm(k, d, alpha1, alpha2, degree_reg="l2"):
             "The input argument 'degree_reg' must be either 'l2' or 'lb'."
         )
 
-    S = rowsum_matrix(n)
+    S = rowsum_matrix.rowsum_matrix(n)
 
     rho = .1
     mu = 1/(0.9/(rho*(2*(n-1))))
